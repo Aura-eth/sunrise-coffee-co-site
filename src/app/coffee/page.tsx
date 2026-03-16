@@ -7,749 +7,602 @@ import { cn } from "@/lib/utils";
 
 const coffeeItems = [
   {
-    origin: "Ethiopia, Yirgacheffe",
-    region: "Africa",
-    altitude: "1,700\u20142,200m",
-    processing: "Washed",
-    notes: ["Floral", "Wild berry", "Tea-like clarity"],
-    roast: "Light",
-    brewing: "Pour-over (recommended), Chemex",
-    price: "$18/12oz",
-    roastColor: "#e8b84b",
+    name: "Ethiopian Yirgacheffe",
+    origin: "Gedeo Zone, Ethiopia",
+    altitude: "1,900\u20132,200m",
+    process: "Washed",
+    notes: "Blueberry, jasmine, bright acidity",
+    availability: "In Stock",
+    price: "$6",
+    image: "https://source.unsplash.com/600x400/?ethiopia,coffee,beans",
+    color: "from-amber-900 to-amber-700",
   },
   {
-    origin: "Kenya, AA Grade",
-    region: "Africa",
-    altitude: "1,600\u20142,000m",
-    processing: "Washed",
-    notes: ["Citrus", "Black tea", "Bright finish"],
-    roast: "Light",
-    brewing: "Pour-over (ideal), Aeropress",
-    price: "$19/12oz",
-    roastColor: "#e8b84b",
+    name: "Colombian Geisha",
+    origin: "Panama, Boquete Region",
+    altitude: "1,500\u20131,700m",
+    process: "Washed",
+    notes: "Floral, tropical fruit, silky body",
+    availability: "In Stock",
+    price: "$7",
+    image: "https://source.unsplash.com/600x400/?colombia,coffee,farm",
+    color: "from-stone-800 to-amber-800",
   },
   {
-    origin: "Rwanda, Burundi Border",
-    region: "Africa",
-    altitude: "1,800\u20142,100m",
-    processing: "Natural",
-    notes: ["Red fruit", "Wine-like", "Complex"],
-    roast: "Light",
-    brewing: "Pour-over (recommended), Chemex",
-    price: "$18/12oz",
-    roastColor: "#e8b84b",
+    name: "Kenyan AA",
+    origin: "Mount Kenya, Central Highlands",
+    altitude: "1,700\u20132,000m",
+    process: "Washed",
+    notes: "Black currant, citrus, wine-like complexity",
+    availability: "In Stock",
+    price: "$6.50",
+    image: "https://source.unsplash.com/600x400/?kenya,coffee,highland",
+    color: "from-red-900 to-amber-800",
   },
   {
-    origin: "Colombia, Geisha",
-    region: "Americas",
-    altitude: "1,500\u20141,800m",
-    processing: "Natural",
-    notes: ["Stone fruit", "Chocolate", "Creamy body"],
-    roast: "Medium",
-    brewing: "Pour-over, French press",
-    price: "$17/12oz",
-    roastColor: "#c87941",
+    name: "Natural Process Anaerobic",
+    origin: "Costa Rica, San Isidro",
+    altitude: "1,600\u20131,900m",
+    process: "Natural Fermented",
+    notes: "Fermented berry, chocolate, full body",
+    availability: "In Stock",
+    price: "$7.50",
+    image: "https://source.unsplash.com/600x400/?costa,rica,coffee,natural",
+    color: "from-orange-900 to-red-800",
   },
   {
-    origin: "Guatemala, Huehuetenango",
-    region: "Americas",
-    altitude: "1,400\u20141,700m",
-    processing: "Washed",
-    notes: ["Nutty", "Caramel", "Balanced sweetness"],
-    roast: "Medium",
-    brewing: "Pour-over, immersion",
-    price: "$16/12oz",
-    roastColor: "#c87941",
+    name: "Indonesian Sumatra Mandheling",
+    origin: "North Sumatra, Indonesia",
+    altitude: "1,200\u20131,600m",
+    process: "Wet-Hulled",
+    notes: "Earthy, herbal, low acid, full body",
+    availability: "Limited",
+    price: "$6.50",
+    image: "https://source.unsplash.com/600x400/?sumatra,indonesia,coffee",
+    color: "from-green-900 to-stone-800",
   },
   {
-    origin: "Peru, Cusco",
-    region: "Americas",
-    altitude: "1,300\u20141,600m",
-    processing: "Washed",
-    notes: ["Cocoa", "Hazelnut", "Smooth finish"],
-    roast: "Medium-dark",
-    brewing: "Pour-over, Moka pot",
-    price: "$15/12oz",
-    roastColor: "#7a3e1e",
+    name: "Rwandan Bourbon",
+    origin: "Huye District, Rwanda",
+    altitude: "1,800\u20132,100m",
+    process: "Fully Washed",
+    notes: "Cherry, cocoa, balanced sweetness",
+    availability: "Seasonal",
+    price: "$7",
+    image: "https://source.unsplash.com/600x400/?rwanda,coffee,cherry",
+    color: "from-rose-900 to-amber-900",
   },
 ];
 
-const processSteps = [
+const galleryImages = [
   {
-    step: 1,
-    title: "Farm Origin",
-    description:
-      "We partner directly with farms and cooperatives. We know the growers, the altitude, the soil. Transparency starts here.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
-        <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z" />
-        <path d="M2 12h4M18 12h4M12 2v4M12 18v4" />
-      </svg>
-    ),
+    url: "https://source.unsplash.com/800x1000/?coffee,farm,highlands,morning",
+    alt: "Coffee farm highlands morning light",
+    span: "row-span-2",
   },
   {
-    step: 2,
-    title: "Careful Sourcing",
-    description:
-      "Our team selects only the finest lots. Each origin is tasted, evaluated, and approved before roasting.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-        <path d="M9 12l2 2 4-4" />
-        <path d="M12 3a9 9 0 100 18A9 9 0 0012 3z" />
-      </svg>
-    ),
+    url: "https://source.unsplash.com/800x500/?coffee,cherry,branch,ripening",
+    alt: "Coffee cherry ripening on branch",
+    span: "",
   },
   {
-    step: 3,
-    title: "Small-Batch Roasting",
-    description:
-      "Roasted fresh in Scottsdale in small quantities. We roast to order, never sitting on old stock.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
-        <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-        <path d="M9 9h.01M15 9h.01" />
-        <path d="M12 6v2" />
-      </svg>
-    ),
+    url: "https://source.unsplash.com/800x500/?hands,harvesting,coffee,cherries",
+    alt: "Hands harvesting ripe coffee cherries",
+    span: "",
   },
   {
-    step: 4,
-    title: "Hand-Pour Brewing",
-    description:
-      "Poured over ceramic by hand. The ritual of pour-over brings out the unique character of each origin.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-        <path d="M8 3h8l-1 9H9L8 3z" />
-        <path d="M9 12c0 4 6 4 6 0" />
-        <path d="M7 21h10" />
-        <path d="M12 12v9" />
-      </svg>
-    ),
+    url: "https://source.unsplash.com/800x600/?roasted,coffee,beans,cooling",
+    alt: "Fresh roasted beans cooling",
+    span: "",
+  },
+  {
+    url: "https://source.unsplash.com/800x1000/?pour,over,coffee,bloom,close",
+    alt: "Close-up of pour over bloom",
+    span: "row-span-2",
+  },
+  {
+    url: "https://source.unsplash.com/800x500/?coffee,pour,golden,stream,cup",
+    alt: "Golden stream pouring into white cup",
+    span: "",
+  },
+  {
+    url: "https://source.unsplash.com/800x500/?specialty,coffee,single,origin,cup",
+    alt: "Finished single origin pour over",
+    span: "",
   },
 ];
 
-const faqs = [
-  {
-    question: "What makes single-origin coffee special?",
-    answer:
-      "Single-origin coffee comes from one farm, region, or micro-lot. This means you taste the unique characteristics of that specific place\u2014the soil, altitude, climate, and processing. Multi-origin blends mix flavors; single-origins let each origin shine.",
-  },
-  {
-    question: "Why pour-over instead of espresso?",
-    answer:
-      "Pour-over allows full control over water temperature, contact time, and brewing speed. This brings out the subtle notes and complexity in single-origin beans. Espresso is wonderful, but it masks the unique character of each origin.",
-  },
-  {
-    question: "How should I store my beans at home?",
-    answer:
-      "Keep beans in an airtight container, away from light, heat, and moisture. A cool, dark pantry is ideal. Avoid the freezer\u2014temperature fluctuations damage the beans. Grind just before brewing for best results.",
-  },
-  {
-    question: "Can I order beans online or for home brewing?",
-    answer:
-      "We currently brew and serve at our Scottsdale location. Visit us to discuss options for beans to take home\u2014we\u2019re exploring ways to share our coffees with our community.",
-  },
-  {
-    question: "What\u2019s the difference between roast levels?",
-    answer:
-      "Light roasts preserve the origin\u2019s unique flavors\u2014more acidity, complexity, origin character. Medium roasts balance origin flavor with roasted body. Dark roasts emphasize roasted body and richness. We recommend light roasts for single-origin to taste the place it came from.",
-  },
-  {
-    question: "How do I brew pour-over at home?",
-    answer:
-      "You\u2019ll need: a pour-over cone (ceramic or plastic), filters, a gooseneck kettle, a scale, and freshly ground beans. Use water just off boil (195\u2014205\u00b0F). Start with a small amount to \u2018bloom\u2019 the grounds for 30 seconds, then pour in slow circles. Total brew time is 3\u20144 minutes. We\u2019re happy to guide you in person.",
-  },
-];
+function AvailabilityBadge({ status }: { status: string }) {
+  const styles: Record<string, string> = {
+    "In Stock": "bg-emerald-50 text-emerald-700 border-emerald-200",
+    Limited: "bg-amber-50 text-amber-700 border-amber-200",
+    Seasonal: "bg-rose-50 text-rose-700 border-rose-200",
+  };
+  return (
+    <span
+      className={cn(
+        "text-xs font-semibold uppercase tracking-widest px-2.5 py-1 rounded-full border",
+        styles[status] ?? "bg-stone-50 text-stone-600 border-stone-200"
+      )}
+    >
+      {status}
+    </span>
+  );
+}
 
-const africaItems = coffeeItems.filter((c) => c.region === "Africa");
-const americasItems = coffeeItems.filter((c) => c.region === "Americas");
+function CoffeeCard({ item, index }: { item: (typeof coffeeItems)[0]; index: number }) {
+  const [flipped, setFlipped] = useState(false);
+
+  return (
+    <FadeInUp delay={index * 80} className="h-full">
+      <div
+        className="coffee-card-wrapper h-full cursor-pointer"
+        onMouseEnter={() => setFlipped(true)}
+        onMouseLeave={() => setFlipped(false)}
+        onClick={() => setFlipped((f) => !f)}
+        style={{ perspective: "1000px" }}
+      >
+        <div
+          className="coffee-card-inner relative w-full h-full"
+          style={{
+            transformStyle: "preserve-3d",
+            transition: "transform 0.55s cubic-bezier(0.4,0,0.2,1)",
+            transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
+            minHeight: "360px",
+          }}
+        >
+          {/* Front */}
+          <div
+            className="absolute inset-0 rounded-2xl overflow-hidden bg-white border border-stone-100 shadow-sm"
+            style={{ backfaceVisibility: "hidden" }}
+          >
+            <div className="relative h-44 overflow-hidden">
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+              />
+              <div className={cn("absolute inset-0 opacity-30 bg-gradient-to-b", item.color)} />
+              <div className="absolute top-3 right-3">
+                <AvailabilityBadge status={item.availability} />
+              </div>
+            </div>
+            <div className="p-5">
+              <h3
+                className="text-lg font-bold mb-1 leading-tight"
+                style={{ fontFamily: "var(--font-heading)", color: "var(--color-text)" }}
+              >
+                {item.name}
+              </h3>
+              <p className="text-xs text-stone-500 mb-3 tracking-wide">{item.origin}</p>
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {item.notes.split(", ").map((note) => (
+                  <span
+                    key={note}
+                    className="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-100"
+                  >
+                    {note}
+                  </span>
+                ))}
+              </div>
+              <div className="flex items-center justify-between pt-3 border-t border-stone-100">
+                <span className="text-xs text-stone-400 uppercase tracking-widest">{item.process}</span>
+                <span
+                  className="text-xl font-bold"
+                  style={{ color: "var(--color-primary)" }}
+                >
+                  {item.price}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Back */}
+          <div
+            className="absolute inset-0 rounded-2xl overflow-hidden flex flex-col justify-center items-start p-7"
+            style={{
+              backfaceVisibility: "hidden",
+              transform: "rotateY(180deg)",
+              background: "linear-gradient(135deg, #3b1f0e 0%, #6b3a20 60%, #b45309 100%)",
+            }}
+          >
+            <span className="text-xs font-bold uppercase tracking-widest text-amber-300 mb-4">Origin Details</span>
+            <h3 className="text-xl font-bold text-white mb-5 leading-tight" style={{ fontFamily: "var(--font-heading)" }}>
+              {item.name}
+            </h3>
+            <div className="space-y-3 w-full">
+              <div className="flex justify-between items-center border-b border-white/10 pb-2">
+                <span className="text-xs text-white/60 uppercase tracking-wide">Origin</span>
+                <span className="text-sm text-white font-medium text-right max-w-[60%]">{item.origin}</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-white/10 pb-2">
+                <span className="text-xs text-white/60 uppercase tracking-wide">Altitude</span>
+                <span className="text-sm text-white font-medium">{item.altitude}</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-white/10 pb-2">
+                <span className="text-xs text-white/60 uppercase tracking-wide">Process</span>
+                <span className="text-sm text-white font-medium">{item.process}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-white/60 uppercase tracking-wide">Tasting</span>
+                <span className="text-sm text-amber-200 font-medium text-right max-w-[60%]">{item.notes}</span>
+              </div>
+            </div>
+            <div className="mt-6 w-full flex justify-between items-center">
+              <AvailabilityBadge status={item.availability} />
+              <span className="text-2xl font-bold text-white">{item.price}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </FadeInUp>
+  );
+}
 
 export default function CoffeePage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-
   return (
     <>
       <style>{`
-        .coffee-card {
-          position: relative;
-          transition: transform 0.3s var(--ease-out, ease-out), box-shadow 0.3s ease;
+        .gradient-heading {
+          background: linear-gradient(90deg, #D4A574 0%, #C85A17 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
-        .coffee-card::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 0;
-          bottom: 0;
-          width: 3px;
-          background: #C85A17;
-          border-radius: 3px 0 0 3px;
-          transform: scaleY(0.3);
-          transform-origin: top;
-          transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .coffee-card-wrapper {
+          height: 100%;
         }
-        .coffee-card:hover::before {
-          transform: scaleY(1);
+        .coffee-card-inner {
+          height: 100%;
         }
-        .coffee-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-          border-color: #C85A17 !important;
+        @keyframes heroParallax {
+          0% { transform: scale(1.08) translateY(0px); }
+          100% { transform: scale(1.0) translateY(-18px); }
         }
-        .roast-pip {
-          display: inline-block;
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          margin-right: 6px;
-          vertical-align: middle;
+        .hero-img {
+          animation: heroParallax 8s ease-out forwards;
         }
-        .faq-answer {
-          overflow: hidden;
-          transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        .masonry-grid {
+          columns: 1;
         }
-        .timeline-line {
-          background: linear-gradient(to bottom, #C85A17, transparent);
+        @media (min-width: 640px) {
+          .masonry-grid { columns: 2; }
         }
-        @keyframes fadeSlideIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
+        @media (min-width: 1024px) {
+          .masonry-grid { columns: 3; }
         }
-        .note-tag {
-          transition: background 0.2s ease, color 0.2s ease;
+        .masonry-item {
+          break-inside: avoid;
+          margin-bottom: 1rem;
         }
-        .coffee-card:hover .note-tag {
-          background: rgba(200, 90, 23, 0.12);
-          color: #C85A17;
+        .masonry-item img {
+          transition: transform 0.6s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s ease;
+        }
+        .masonry-item:hover img {
+          transform: scale(1.03);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.18);
         }
       `}</style>
 
-      {/* ===== HERO ===== */}
+      {/* HERO */}
       <section
         id="hero"
-        className="relative min-h-[60vh] flex items-center justify-center overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #faf6f1 0%, #f0e8de 50%, #ede0d3 100%)" }}
+        className="relative min-h-[92vh] flex items-center justify-center overflow-hidden"
       >
-        <div className="absolute inset-0 pointer-events-none">
-          <div
-            style={{
-              position: "absolute",
-              top: "10%",
-              right: "8%",
-              width: "340px",
-              height: "340px",
-              borderRadius: "50%",
-              background: "radial-gradient(circle, rgba(200,90,23,0.07) 0%, transparent 70%)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "5%",
-              left: "5%",
-              width: "220px",
-              height: "220px",
-              borderRadius: "50%",
-              background: "radial-gradient(circle, rgba(200,90,23,0.05) 0%, transparent 70%)",
-            }}
-          />
-        </div>
-
-        <div className="relative z-10 text-center max-w-3xl mx-auto px-6 py-24">
+        <img
+          src="https://source.unsplash.com/1600x900/?pour,over,coffee,single,origin,golden"
+          alt="Single origin pour-over coffee"
+          className="hero-img absolute inset-0 w-full h-full object-cover"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(20,10,5,0.55) 0%, rgba(30,15,5,0.35) 40%, rgba(15,8,3,0.75) 100%)",
+          }}
+        />
+        <div className="relative z-10 text-center max-w-3xl mx-auto px-6">
           <FadeInUp delay={0}>
             <span
-              className="inline-block text-xs font-semibold uppercase tracking-[0.25em] mb-6"
-              style={{ color: "#C85A17" }}
+              className="inline-block text-xs font-bold uppercase tracking-[0.25em] mb-6 px-4 py-1.5 rounded-full border"
+              style={{ color: "#D4A574", borderColor: "rgba(212,165,116,0.35)", background: "rgba(212,165,116,0.08)" }}
             >
-              Sunrise Coffee Co
+              Sunrise Coffee Co.
             </span>
           </FadeInUp>
           <FadeInUp delay={100}>
             <h1
-              className="text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight"
-              style={{ fontFamily: "var(--font-heading, Georgia, serif)", color: "#1a1410" }}
+              className="text-5xl md:text-7xl font-bold text-white mb-6"
+              style={{ fontFamily: "var(--font-heading)", letterSpacing: "-0.02em", lineHeight: 1.08 }}
             >
               Our Single-Origin
               <br />
-              <span style={{ color: "#C85A17" }}>Selection</span>
+              <span className="gradient-heading">Selection</span>
             </h1>
           </FadeInUp>
           <FadeInUp delay={200}>
             <p
-              className="text-lg md:text-xl leading-relaxed max-w-xl mx-auto"
-              style={{ color: "#6b5744", fontFamily: "var(--font-body, sans-serif)" }}
+              className="text-lg md:text-xl max-w-xl mx-auto leading-relaxed"
+              style={{ color: "rgba(255,255,255,0.72)", fontFamily: "var(--font-body)" }}
             >
-              Thoughtfully sourced from origins around the world.
-              <br />
-              Every coffee has a story.
+              Sourced directly from farms we trust. Each origin brings its own character, story, and flavor profile.
             </p>
           </FadeInUp>
           <FadeInUp delay={300}>
-            <div className="mt-10 flex items-center justify-center gap-3">
-              <div style={{ height: "1px", width: "40px", background: "#C85A17", opacity: 0.5 }} />
-              <span className="text-xs uppercase tracking-widest" style={{ color: "#9c7a60" }}>
-                Roasted fresh in Scottsdale
-              </span>
-              <div style={{ height: "1px", width: "40px", background: "#C85A17", opacity: 0.5 }} />
+            <div className="mt-10 flex items-center justify-center gap-8">
+              <div className="text-center">
+                <div className="text-2xl font-bold" style={{ color: "#D4A574" }}>6</div>
+                <div className="text-xs uppercase tracking-widest mt-1" style={{ color: "rgba(255,255,255,0.45)" }}>Origins</div>
+              </div>
+              <div className="w-px h-10" style={{ background: "rgba(255,255,255,0.15)" }} />
+              <div className="text-center">
+                <div className="text-2xl font-bold" style={{ color: "#D4A574" }}>Direct</div>
+                <div className="text-xs uppercase tracking-widest mt-1" style={{ color: "rgba(255,255,255,0.45)" }}>Sourced</div>
+              </div>
+              <div className="w-px h-10" style={{ background: "rgba(255,255,255,0.15)" }} />
+              <div className="text-center">
+                <div className="text-2xl font-bold" style={{ color: "#D4A574" }}>Weekly</div>
+                <div className="text-xs uppercase tracking-widest mt-1" style={{ color: "rgba(255,255,255,0.45)" }}>Roasted</div>
+              </div>
             </div>
           </FadeInUp>
         </div>
+        <div
+          className="absolute bottom-0 left-0 right-0 h-24"
+          style={{ background: "linear-gradient(to top, #faf7f4, transparent)" }}
+        />
       </section>
 
-      {/* ===== MENU SHOWCASE ===== */}
+      {/* MENU SHOWCASE */}
       <section
         id="menu-showcase"
-        className="py-24 px-6"
-        style={{ background: "#fdfaf7" }}
+        className="py-28 px-6"
+        style={{ background: "var(--color-bg, #faf7f4)" }}
       >
         <div className="max-w-6xl mx-auto">
-          <FadeInUp delay={0}>
-            <div className="text-center mb-4">
+          <div className="text-center mb-20">
+            <FadeInUp delay={0}>
               <span
-                className="text-xs font-semibold uppercase tracking-[0.2em]"
-                style={{ color: "#C85A17" }}
+                className="inline-block text-xs font-bold uppercase tracking-[0.22em] mb-4"
+                style={{ color: "var(--color-primary, #C85A17)" }}
               >
-                Current Offerings
+                What We're Pouring
               </span>
-            </div>
-          </FadeInUp>
-          <FadeInUp delay={100}>
-            <h2
-              className="text-4xl md:text-5xl font-bold text-center mb-3 tracking-tight"
-              style={{ fontFamily: "var(--font-heading, Georgia, serif)", color: "#1a1410" }}
-            >
-              Current Offerings
-            </h2>
-          </FadeInUp>
-          <FadeInUp delay={150}>
-            <p className="text-center mb-20" style={{ color: "#9c7a60" }}>
-              All beans roasted fresh in Scottsdale
-            </p>
-          </FadeInUp>
-
-          {/* Africa Region */}
-          <FadeInUp delay={0}>
-            <div className="flex items-center gap-4 mb-10">
-              <h3
-                className="text-sm font-bold uppercase tracking-[0.2em]"
-                style={{ color: "#C85A17" }}
+            </FadeInUp>
+            <FadeInUp delay={100}>
+              <h2
+                className="text-4xl md:text-5xl font-bold mb-5"
+                style={{ fontFamily: "var(--font-heading)", color: "var(--color-text)" }}
               >
-                Africa
-              </h3>
-              <div
-                className="flex-1"
-                style={{ height: "1px", background: "linear-gradient(to right, #C85A17, transparent)" }}
-              />
-            </div>
-          </FadeInUp>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {africaItems.map((item, i) => (
-              <FadeInUp key={item.origin} delay={i * 80}>
-                <div
-                  className="coffee-card bg-white rounded-2xl border p-7 h-full flex flex-col"
-                  style={{ borderColor: "#e8ddd4" }}
-                >
-                  <div className="flex items-start justify-between mb-5">
-                    <div>
-                      <h4
-                        className="font-bold text-lg leading-tight mb-1"
-                        style={{ color: "#1a1410", fontFamily: "var(--font-heading, Georgia, serif)" }}
-                      >
-                        {item.origin}
-                      </h4>
-                      <span className="text-xs" style={{ color: "#9c7a60" }}>
-                        {item.altitude}
-                      </span>
-                    </div>
-                    <span
-                      className="text-lg font-bold flex-shrink-0 ml-3"
-                      style={{ color: "#C85A17" }}
-                    >
-                      {item.price}
-                    </span>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {item.notes.map((note) => (
-                      <span
-                        key={note}
-                        className="note-tag text-xs px-3 py-1 rounded-full"
-                        style={{ background: "rgba(200,90,23,0.07)", color: "#7a4a2e" }}
-                      >
-                        {note}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="mt-auto space-y-2 pt-4" style={{ borderTop: "1px solid #f0e8de" }}>
-                    <div className="flex items-center justify-between text-sm">
-                      <span style={{ color: "#9c7a60" }}>Processing</span>
-                      <span className="font-medium" style={{ color: "#3d2b1f" }}>{item.processing}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span style={{ color: "#9c7a60" }}>Roast</span>
-                      <span className="font-medium flex items-center" style={{ color: "#3d2b1f" }}>
-                        <span className="roast-pip" style={{ background: item.roastColor }} />
-                        {item.roast}
-                      </span>
-                    </div>
-                    <div className="flex items-start justify-between text-sm gap-2">
-                      <span style={{ color: "#9c7a60" }} className="flex-shrink-0">Brew</span>
-                      <span className="font-medium text-right" style={{ color: "#3d2b1f" }}>{item.brewing}</span>
-                    </div>
-                  </div>
-                </div>
-              </FadeInUp>
-            ))}
-          </div>
-
-          {/* Americas Region */}
-          <FadeInUp delay={0}>
-            <div className="flex items-center gap-4 mb-10">
-              <h3
-                className="text-sm font-bold uppercase tracking-[0.2em]"
-                style={{ color: "#C85A17" }}
+                Current{" "}
+                <span className="gradient-heading">Offerings</span>
+              </h2>
+            </FadeInUp>
+            <FadeInUp delay={200}>
+              <p
+                className="text-base md:text-lg max-w-lg mx-auto leading-relaxed"
+                style={{ color: "var(--color-muted, #78716c)" }}
               >
-                Americas
-              </h3>
-              <div
-                className="flex-1"
-                style={{ height: "1px", background: "linear-gradient(to right, #C85A17, transparent)" }}
-              />
-            </div>
-          </FadeInUp>
+                Hover any card to reveal full origin details. Each coffee is roasted to order and brewed as a pour-over.
+              </p>
+            </FadeInUp>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {americasItems.map((item, i) => (
-              <FadeInUp key={item.origin} delay={i * 80}>
-                <div
-                  className="coffee-card bg-white rounded-2xl border p-7 h-full flex flex-col"
-                  style={{ borderColor: "#e8ddd4" }}
-                >
-                  <div className="flex items-start justify-between mb-5">
-                    <div>
-                      <h4
-                        className="font-bold text-lg leading-tight mb-1"
-                        style={{ color: "#1a1410", fontFamily: "var(--font-heading, Georgia, serif)" }}
-                      >
-                        {item.origin}
-                      </h4>
-                      <span className="text-xs" style={{ color: "#9c7a60" }}>
-                        {item.altitude}
-                      </span>
-                    </div>
-                    <span
-                      className="text-lg font-bold flex-shrink-0 ml-3"
-                      style={{ color: "#C85A17" }}
-                    >
-                      {item.price}
-                    </span>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {item.notes.map((note) => (
-                      <span
-                        key={note}
-                        className="note-tag text-xs px-3 py-1 rounded-full"
-                        style={{ background: "rgba(200,90,23,0.07)", color: "#7a4a2e" }}
-                      >
-                        {note}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="mt-auto space-y-2 pt-4" style={{ borderTop: "1px solid #f0e8de" }}>
-                    <div className="flex items-center justify-between text-sm">
-                      <span style={{ color: "#9c7a60" }}>Processing</span>
-                      <span className="font-medium" style={{ color: "#3d2b1f" }}>{item.processing}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span style={{ color: "#9c7a60" }}>Roast</span>
-                      <span className="font-medium flex items-center" style={{ color: "#3d2b1f" }}>
-                        <span className="roast-pip" style={{ background: item.roastColor }} />
-                        {item.roast}
-                      </span>
-                    </div>
-                    <div className="flex items-start justify-between text-sm gap-2">
-                      <span style={{ color: "#9c7a60" }} className="flex-shrink-0">Brew</span>
-                      <span className="font-medium text-right" style={{ color: "#3d2b1f" }}>{item.brewing}</span>
-                    </div>
-                  </div>
-                </div>
-              </FadeInUp>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+            {coffeeItems.map((item, i) => (
+              <CoffeeCard key={item.name} item={item} index={i} />
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ===== ATMOSPHERE BAND ===== */}
-      <section
-        className="relative h-64 md:h-80 flex items-center justify-center overflow-hidden"
-        style={{ background: "#1a1410" }}
-      >
-        <img
-          src="https://source.unsplash.com/1600x600/?pour+over+coffee+brewing+close-up+steam+morning+light"
-          alt="Pour over coffee brewing"
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to right, rgba(26,20,16,0.9) 0%, rgba(26,20,16,0.5) 50%, rgba(26,20,16,0.8) 100%)",
-          }}
-        />
-        <div className="relative z-10 text-center px-6">
-          <FadeInUp delay={0}>
-            <p
-              className="text-xl md:text-3xl font-light italic"
-              style={{ color: "rgba(255,255,255,0.9)", fontFamily: "var(--font-heading, Georgia, serif)" }}
-            >
-              &ldquo;Every origin has a story. We&rsquo;re just here to pour it.&rdquo;
-            </p>
-          </FadeInUp>
-        </div>
-      </section>
-
-      {/* ===== PROCESS STEPS ===== */}
-      <section
-        id="process-steps"
-        className="py-24 px-6"
-        style={{ background: "#faf6f1" }}
-      >
-        <div className="max-w-4xl mx-auto">
-          <FadeInUp delay={0}>
-            <span
-              className="block text-center text-xs font-semibold uppercase tracking-[0.2em] mb-4"
-              style={{ color: "#C85A17" }}
-            >
-              Process
-            </span>
-          </FadeInUp>
           <FadeInUp delay={100}>
-            <h2
-              className="text-4xl md:text-5xl font-bold text-center mb-3 tracking-tight"
-              style={{ fontFamily: "var(--font-heading, Georgia, serif)", color: "#1a1410" }}
-            >
-              From Farm to Cup
-            </h2>
-          </FadeInUp>
-          <FadeInUp delay={150}>
-            <p className="text-center mb-20" style={{ color: "#9c7a60" }}>
-              The journey of every bean
-            </p>
-          </FadeInUp>
-
-          <div className="space-y-0">
-            {processSteps.map((step, i) => (
-              <FadeInUp key={step.step} delay={i * 100}>
-                <div className="flex gap-8 md:gap-12">
-                  {/* Left: number + line */}
-                  <div className="flex flex-col items-center flex-shrink-0">
-                    <div
-                      className="w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0 relative z-10"
-                      style={{
-                        background: i === 0 ? "#C85A17" : "white",
-                        color: i === 0 ? "white" : "#C85A17",
-                        border: "2px solid #C85A17",
-                        boxShadow: "0 4px 16px rgba(200,90,23,0.15)",
-                      }}
-                    >
-                      {step.step}
-                    </div>
-                    {i < processSteps.length - 1 && (
-                      <div
-                        className="w-px flex-1 mt-4 mb-0"
-                        style={{
-                          minHeight: "80px",
-                          background:
-                            "linear-gradient(to bottom, #C85A17 0%, rgba(200,90,23,0.2) 100%)",
-                        }}
-                      />
-                    )}
-                  </div>
-
-                  {/* Right: content */}
-                  <div
-                    className={cn(
-                      "pb-12 flex-1",
-                      i === processSteps.length - 1 && "pb-0"
-                    )}
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div
-                        className="w-9 h-9 rounded-xl flex items-center justify-center"
-                        style={{ background: "rgba(200,90,23,0.1)", color: "#C85A17" }}
-                      >
-                        {step.icon}
-                      </div>
-                      <h3
-                        className="text-xl md:text-2xl font-bold"
-                        style={{ color: "#1a1410", fontFamily: "var(--font-heading, Georgia, serif)" }}
-                      >
-                        {step.title}
-                      </h3>
-                    </div>
-                    <p
-                      className="text-base md:text-lg leading-relaxed max-w-lg"
-                      style={{ color: "#6b5744" }}
-                    >
-                      {step.description}
-                    </p>
-                  </div>
-                </div>
-              </FadeInUp>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== ATMOSPHERE BAND 2 ===== */}
-      <section
-        className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden"
-      >
-        <img
-          src="https://source.unsplash.com/1600x700/?single+origin+coffee+beans+origin+farm+landscape+Ethiopia+Kenya"
-          alt="Coffee farm landscape"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(26,20,16,0.3) 0%, rgba(26,20,16,0.6) 100%)",
-          }}
-        />
-        <div className="relative z-10 text-center px-6">
-          <FadeInUp delay={0}>
-            <h3
-              className="text-2xl md:text-4xl font-bold text-white mb-3"
-              style={{ fontFamily: "var(--font-heading, Georgia, serif)" }}
-            >
-              Sourced with intention.
-              <br />
-              Roasted with care.
-            </h3>
-            <p className="text-sm md:text-base" style={{ color: "rgba(255,255,255,0.7)" }}>
-              We travel to origin. We know the farmers by name.
-            </p>
-          </FadeInUp>
-        </div>
-      </section>
-
-      {/* ===== FAQ ===== */}
-      <section
-        id="faq"
-        className="py-24 px-6"
-        style={{ background: "#fdfaf7" }}
-      >
-        <div className="max-w-3xl mx-auto">
-          <FadeInUp delay={0}>
-            <span
-              className="block text-center text-xs font-semibold uppercase tracking-[0.2em] mb-4"
-              style={{ color: "#C85A17" }}
-            >
-              FAQ
-            </span>
-          </FadeInUp>
-          <FadeInUp delay={100}>
-            <h2
-              className="text-4xl md:text-5xl font-bold text-center mb-16 tracking-tight"
-              style={{ fontFamily: "var(--font-heading, Georgia, serif)", color: "#1a1410" }}
-            >
-              Questions About Our Coffee
-            </h2>
-          </FadeInUp>
-
-          <div className="space-y-3">
-            {faqs.map((faq, i) => (
-              <FadeInUp key={i} delay={i * 60}>
-                <div
-                  className="rounded-2xl overflow-hidden"
-                  style={{
-                    border: openFaq === i ? "1.5px solid #C85A17" : "1.5px solid #e8ddd4",
-                    background: openFaq === i ? "rgba(200,90,23,0.03)" : "white",
-                    transition: "border-color 0.3s ease, background 0.3s ease",
-                  }}
-                >
-                  <button
-                    className="w-full flex justify-between items-center px-6 py-5 text-left"
-                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                    aria-expanded={openFaq === i}
-                  >
-                    <span
-                      className="font-semibold text-base md:text-lg pr-4 leading-snug"
-                      style={{ color: "#1a1410" }}
-                    >
-                      {faq.question}
-                    </span>
-                    <span
-                      className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
-                      style={{
-                        background: openFaq === i ? "#C85A17" : "rgba(200,90,23,0.1)",
-                        color: openFaq === i ? "white" : "#C85A17",
-                        transform: openFaq === i ? "rotate(45deg)" : "rotate(0deg)",
-                      }}
-                    >
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 14 14"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      >
-                        <line x1="7" y1="1" x2="7" y2="13" />
-                        <line x1="1" y1="7" x2="13" y2="7" />
-                      </svg>
-                    </span>
-                  </button>
-
-                  <div
-                    className="faq-answer"
-                    style={{
-                      maxHeight: openFaq === i ? "400px" : "0px",
-                      opacity: openFaq === i ? 1 : 0,
-                    }}
-                  >
-                    <p
-                      className="px-6 pb-6 text-base leading-relaxed"
-                      style={{ color: "#6b5744" }}
-                    >
-                      {faq.answer}
-                    </p>
-                  </div>
-                </div>
-              </FadeInUp>
-            ))}
-          </div>
-
-          {/* Bottom CTA */}
-          <FadeInUp delay={200}>
             <div
-              className="mt-16 rounded-2xl p-8 md:p-10 text-center"
+              className="mt-16 rounded-2xl px-8 py-7 flex flex-col md:flex-row items-start md:items-center gap-4 border"
               style={{
-                background: "linear-gradient(135deg, #1a1410 0%, #2e1f14 100%)",
+                background: "linear-gradient(135deg, #fdf6ee 0%, #fef3e8 100%)",
+                borderColor: "rgba(212,165,116,0.3)",
               }}
             >
-              <p
-                className="text-lg md:text-xl font-light italic mb-4"
-                style={{ color: "rgba(255,255,255,0.85)", fontFamily: "var(--font-heading, Georgia, serif)" }}
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ background: "rgba(200,90,23,0.12)" }}
               >
-                Still have questions? Come visit us.
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="#C85A17" strokeWidth="1.5" />
+                  <path d="M12 8v4M12 16h.01" stroke="#C85A17" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </div>
+              <p className="text-sm leading-relaxed" style={{ color: "#7c5c3b" }}>
+                <strong className="font-semibold" style={{ color: "#4a2e14" }}>Rotating Selection.</strong>{" "}
+                Our single-origin offerings change with the harvest cycle. Seasonal and limited varieties may sell out — ask your barista about upcoming arrivals.
               </p>
-              <p className="text-sm mb-6" style={{ color: "rgba(255,255,255,0.5)" }}>
-                Our baristas are always happy to talk coffee.
+            </div>
+          </FadeInUp>
+        </div>
+      </section>
+
+      {/* ATMOSPHERIC BAND */}
+      <section
+        className="relative h-64 md:h-80 flex items-center justify-center overflow-hidden"
+        aria-hidden="true"
+      >
+        <img
+          src="https://source.unsplash.com/1600x600/?coffee,roastery,wooden,warm,aesthetic"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ transform: "scale(1.05)" }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: "rgba(30,12,4,0.52)" }}
+        />
+        <div className="relative z-10 text-center px-6">
+          <p
+            className="text-xl md:text-3xl font-light italic"
+            style={{ color: "rgba(255,255,255,0.88)", fontFamily: "var(--font-heading)", letterSpacing: "0.01em" }}
+          >
+            &#8220;Traceability is not a feature. It&rsquo;s the foundation.&#8221;
+          </p>
+        </div>
+        <div
+          className="absolute top-0 left-0 right-0 h-16"
+          style={{ background: "linear-gradient(to bottom, #faf7f4, transparent)" }}
+        />
+        <div
+          className="absolute bottom-0 left-0 right-0 h-16"
+          style={{ background: "linear-gradient(to top, #faf7f4, transparent)" }}
+        />
+      </section>
+
+      {/* GALLERY */}
+      <section
+        id="gallery"
+        className="py-28 px-6"
+        style={{ background: "var(--color-bg, #faf7f4)" }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <FadeInUp delay={0}>
+              <span
+                className="inline-block text-xs font-bold uppercase tracking-[0.22em] mb-4"
+                style={{ color: "var(--color-primary, #C85A17)" }}
+              >
+                The Journey
+              </span>
+            </FadeInUp>
+            <FadeInUp delay={100}>
+              <h2
+                className="text-4xl md:text-5xl font-bold mb-5"
+                style={{ fontFamily: "var(--font-heading)", color: "var(--color-text)" }}
+              >
+                From Origin{" "}
+                <span className="gradient-heading">to Cup</span>
+              </h2>
+            </FadeInUp>
+            <FadeInUp delay={200}>
+              <p
+                className="text-base md:text-lg max-w-md mx-auto leading-relaxed"
+                style={{ color: "var(--color-muted, #78716c)" }}
+              >
+                A visual journey through single-origin coffee
               </p>
+            </FadeInUp>
+          </div>
+
+          <FadeInUp delay={100}>
+            <div className="masonry-grid gap-4">
+              {galleryImages.map((img, i) => (
+                <div key={i} className="masonry-item rounded-2xl overflow-hidden">
+                  <img
+                    src={img.url}
+                    alt={img.alt}
+                    className="w-full block object-cover rounded-2xl"
+                    style={{
+                      aspectRatio:
+                        i === 0 || i === 4
+                          ? "4/5"
+                          : i === 3
+                          ? "4/3"
+                          : "16/10",
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </FadeInUp>
+
+          <FadeInUp delay={200}>
+            <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                {
+                  step: "01",
+                  title: "Farm Direct",
+                  desc: "We visit and verify every farm partner. No middlemen, no mystery origins.",
+                },
+                {
+                  step: "02",
+                  title: "Small Batch Roasted",
+                  desc: "Roasted in-house weekly to ensure peak freshness when you order.",
+                },
+                {
+                  step: "03",
+                  title: "Precision Poured",
+                  desc: "Every pour-over is dialed in to the specific density and profile of that origin.",
+                },
+              ].map((item) => (
+                <div
+                  key={item.step}
+                  className="flex gap-5 items-start"
+                >
+                  <span
+                    className="text-3xl font-black flex-shrink-0"
+                    style={{ color: "rgba(200,90,23,0.18)", fontFamily: "var(--font-heading)", lineHeight: 1 }}
+                  >
+                    {item.step}
+                  </span>
+                  <div>
+                    <h4
+                      className="text-base font-semibold mb-2"
+                      style={{ color: "var(--color-text)", fontFamily: "var(--font-heading)" }}
+                    >
+                      {item.title}
+                    </h4>
+                    <p className="text-sm leading-relaxed" style={{ color: "var(--color-muted, #78716c)" }}>
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </FadeInUp>
+        </div>
+      </section>
+
+      {/* CTA FOOTER BAND */}
+      <section
+        className="py-24 px-6"
+        style={{
+          background: "linear-gradient(135deg, #1e0d05 0%, #3b1f0e 50%, #5c2d12 100%)",
+        }}
+      >
+        <div className="max-w-2xl mx-auto text-center">
+          <FadeInUp delay={0}>
+            <h2
+              className="text-3xl md:text-4xl font-bold text-white mb-5"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
+              Ready to taste the{" "}
+              <span className="gradient-heading">difference?</span>
+            </h2>
+          </FadeInUp>
+          <FadeInUp delay={100}>
+            <p
+              className="text-base md:text-lg mb-10 leading-relaxed"
+              style={{ color: "rgba(255,255,255,0.6)" }}
+            >
+              Come in and let our baristas guide you through the current selection. Every cup tells the story of where it came from.
+            </p>
+          </FadeInUp>
+          <FadeInUp delay={200}>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="/visit"
-                className="inline-block px-8 py-3 rounded-full font-semibold text-sm transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5"
-                style={{ background: "#C85A17", color: "white" }}
+                className="inline-block px-8 py-4 font-semibold rounded-full text-sm uppercase tracking-widest transition-all duration-300 hover:opacity-90"
+                style={{
+                  background: "linear-gradient(90deg, #D4A574, #C85A17)",
+                  color: "white",
+                }}
               >
-                Find Us in Scottsdale
+                Plan Your Visit
+              </a>
+              <a
+                href="/craft"
+                className="inline-block px-8 py-4 font-semibold rounded-full text-sm uppercase tracking-widest border transition-all duration-300 hover:bg-white/10"
+                style={{
+                  color: "rgba(255,255,255,0.8)",
+                  borderColor: "rgba(255,255,255,0.2)",
+                }}
+              >
+                Our Craft
               </a>
             </div>
           </FadeInUp>
