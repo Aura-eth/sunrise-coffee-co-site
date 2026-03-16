@@ -31,7 +31,7 @@ const navLinks = [
 
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,330 +46,350 @@ function Nav() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all",
         scrolled
-          ? "bg-[#FBF8F3]/90 backdrop-blur-md shadow-sm border-b border-[#D4A574]/20"
+          ? "bg-[#FAF7F2]/90 backdrop-blur-md shadow-sm border-b border-[#D4A574]/20"
           : "bg-transparent"
       )}
       style={{ transition: "background 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out)" }}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20">
         {/* Logo */}
-        <Link
-          href="/"
-          className="flex flex-col leading-none group"
-          aria-label="Sunrise Coffee Co Home"
-        >
+        <Link href="/" className="flex flex-col leading-none group">
           <span
-            style={{ fontFamily: "var(--font-heading, 'Cormorant Garamond', serif)", color: scrolled ? "#2C2416" : "#FBF8F3" }}
-            className="text-2xl font-semibold tracking-wide transition-colors duration-300"
+            className="text-2xl font-semibold tracking-wide"
+            style={{
+              fontFamily: "var(--font-heading)",
+              color: scrolled ? "#2C2418" : "#FAF7F2",
+              transition: "color 0.4s var(--ease-out)",
+              letterSpacing: "0.04em",
+            }}
           >
             Sunrise
           </span>
           <span
-            style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: scrolled ? "#8B6F47" : "#D4A574", letterSpacing: "0.25em" }}
-            className="text-[10px] uppercase font-600 tracking-[0.25em] transition-colors duration-300"
+            className="text-xs tracking-[0.22em] uppercase"
+            style={{
+              fontFamily: "var(--font-body)",
+              color: scrolled ? "#8B6F47" : "#D4A574",
+              transition: "color 0.4s var(--ease-out)",
+            }}
           >
             Coffee Co
           </span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
+        <nav className="hidden md:flex items-center gap-10">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
+              className="relative text-sm tracking-widest uppercase group"
               style={{
-                fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)",
-                color: scrolled ? "#2C2416" : "#FBF8F3",
-                letterSpacing: "0.08em",
+                fontFamily: "var(--font-body)",
+                color: scrolled ? "#2C2418" : "#FAF7F2",
+                transition: "color 0.3s var(--ease-out)",
+                letterSpacing: "0.12em",
               }}
-              className={cn(
-                "text-sm font-semibold uppercase tracking-wider relative group transition-colors duration-300",
-                "after:absolute after:bottom-[-3px] after:left-0 after:h-[1px] after:w-0 after:bg-[#C85A17] after:transition-all after:duration-300 hover:after:w-full"
-              )}
             >
               {link.label}
+              <span
+                className="absolute -bottom-1 left-0 h-px bg-[#C85A17] w-0 group-hover:w-full"
+                style={{ transition: "width 0.3s var(--ease-out)" }}
+              />
             </Link>
           ))}
-          <Link
-            href="/visit"
-            style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)" }}
-            className="ml-4 px-5 py-2 bg-[#C85A17] text-[#FBF8F3] text-sm font-semibold uppercase tracking-wider rounded-none hover:bg-[#8B6F47] transition-colors duration-300"
+          <ShineBorder
+            borderRadius={2}
+            borderWidth={1.5}
+            duration={6}
+            color={["#C85A17", "#D4A574", "#8B6F47"]}
           >
-            Find Us
-          </Link>
+            <Link
+              href="/visit"
+              className="px-5 py-2 text-xs tracking-widest uppercase"
+              style={{
+                fontFamily: "var(--font-body)",
+                color: scrolled ? "#2C2418" : "#FAF7F2",
+                background: scrolled ? "transparent" : "rgba(139,111,71,0.15)",
+                letterSpacing: "0.15em",
+                transition: "all 0.3s var(--ease-out)",
+                display: "block",
+              }}
+            >
+              Find Us
+            </Link>
+          </ShineBorder>
         </nav>
 
         {/* Mobile Hamburger */}
         <button
-          className="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-[5px] z-50"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
+          className="md:hidden flex flex-col gap-[5px] p-2 z-50"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle menu"
         >
           <span
             className={cn(
-              "block h-[1.5px] w-6 transition-all duration-300",
-              menuOpen ? "rotate-45 translate-y-[6.5px] bg-[#2C2416]" : scrolled ? "bg-[#2C2416]" : "bg-[#FBF8F3]"
+              "block h-px w-6 transition-all duration-300 origin-center",
+              mobileOpen ? "rotate-45 translate-y-[7px] bg-[#2C2418]" : ""
             )}
+            style={{ background: mobileOpen ? "#2C2418" : scrolled ? "#2C2418" : "#FAF7F2" }}
           />
           <span
             className={cn(
-              "block h-[1.5px] w-6 transition-all duration-300",
-              menuOpen ? "opacity-0 bg-[#2C2416]" : scrolled ? "bg-[#2C2416]" : "bg-[#FBF8F3]"
+              "block h-px w-6 transition-all duration-300",
+              mobileOpen ? "opacity-0" : ""
             )}
+            style={{ background: scrolled ? "#2C2418" : "#FAF7F2" }}
           />
           <span
             className={cn(
-              "block h-[1.5px] w-6 transition-all duration-300",
-              menuOpen ? "-rotate-45 -translate-y-[6.5px] bg-[#2C2416]" : scrolled ? "bg-[#2C2416]" : "bg-[#FBF8F3]"
+              "block h-px w-6 transition-all duration-300 origin-center",
+              mobileOpen ? "-rotate-45 -translate-y-[7px] bg-[#2C2418]" : ""
             )}
+            style={{ background: mobileOpen ? "#2C2418" : scrolled ? "#2C2418" : "#FAF7F2" }}
           />
         </button>
       </div>
 
-      {/* Mobile Menu Drawer */}
+      {/* Mobile Menu */}
       <div
         className={cn(
-          "md:hidden fixed inset-0 bg-[#FBF8F3] z-40 flex flex-col justify-center items-center gap-10 transition-all duration-500",
-          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          "md:hidden fixed inset-0 z-40 flex flex-col justify-center items-center gap-10 transition-all duration-500",
+          mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         )}
+        style={{ background: "#FAF7F2", top: 0, left: 0, right: 0, bottom: 0 }}
       >
         {navLinks.map((link, i) => (
           <Link
             key={link.href}
             href={link.href}
-            onClick={() => setMenuOpen(false)}
+            onClick={() => setMobileOpen(false)}
+            className="text-4xl font-light tracking-wide"
             style={{
-              fontFamily: "var(--font-heading, 'Cormorant Garamond', serif)",
-              transitionDelay: menuOpen ? `${i * 60}ms` : "0ms",
+              fontFamily: "var(--font-heading)",
+              color: "#2C2418",
+              letterSpacing: "0.06em",
+              transform: mobileOpen ? "translateY(0)" : "translateY(20px)",
+              transition: `transform 0.4s var(--ease-out) ${i * 80}ms, opacity 0.4s var(--ease-out) ${i * 80}ms`,
+              opacity: mobileOpen ? 1 : 0,
             }}
-            className={cn(
-              "text-4xl font-semibold text-[#2C2416] hover:text-[#C85A17] transition-all duration-300",
-              menuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            )}
           >
             {link.label}
           </Link>
         ))}
-        <Link
-          href="/visit"
-          onClick={() => setMenuOpen(false)}
-          style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)" }}
-          className="mt-4 px-8 py-3 bg-[#C85A17] text-[#FBF8F3] text-sm font-semibold uppercase tracking-widest hover:bg-[#8B6F47] transition-colors duration-300"
+        <div
+          className="mt-4 w-16 h-px"
+          style={{ background: "#D4A574" }}
+        />
+        <p
+          className="text-xs tracking-[0.2em] uppercase"
+          style={{ fontFamily: "var(--font-body)", color: "#8B6F47" }}
         >
-          Find Us
-        </Link>
+          Specialty Coffee Co
+        </p>
       </div>
     </header>
   );
 }
 
 function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer style={{ backgroundColor: "#2C2416", color: "#FBF8F3" }} className="relative overflow-hidden">
-      {/* Decorative top border */}
-      <div className="h-[2px] w-full" style={{ background: "linear-gradient(90deg, #8B6F47, #C85A17, #D4A574, #8B6F47)" }} />
-
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-20 pb-12">
-        {/* Main columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-16">
-
-          {/* Brand column */}
-          <div className="lg:col-span-1">
-            <FadeInUp delay={0}>
-              <div className="mb-6">
-                <span
-                  style={{ fontFamily: "var(--font-heading, 'Cormorant Garamond', serif)", color: "#FBF8F3" }}
-                  className="block text-3xl font-semibold tracking-wide mb-1"
-                >
-                  Sunrise
-                </span>
-                <span
-                  style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#D4A574", letterSpacing: "0.25em" }}
-                  className="block text-[10px] uppercase tracking-[0.25em]"
-                >
-                  Coffee Co
-                </span>
-              </div>
+    <footer
+      style={{
+        background: "#2C2418",
+        color: "#FAF7F2",
+        borderTop: "1px solid rgba(212,165,116,0.15)",
+      }}
+    >
+      {/* Main Footer Grid */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
+        {/* Brand Column */}
+        <div className="lg:col-span-1">
+          <FadeInUp delay={0}>
+            <div className="mb-6">
               <p
-                style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#D4A574", lineHeight: "1.75" }}
-                className="text-sm max-w-xs"
+                className="text-3xl font-light leading-tight mb-1"
+                style={{ fontFamily: "var(--font-heading)", letterSpacing: "0.04em", color: "#FAF7F2" }}
               >
-                Specialty coffee roasted with intention. Every cup a ritual, every sip a small sunrise.
+                Sunrise
               </p>
-              {/* Decorative divider */}
-              <div className="mt-8 w-12 h-[1px] bg-[#C85A17]" />
-            </FadeInUp>
-          </div>
-
-          {/* Navigation column */}
-          <div>
-            <FadeInUp delay={100}>
-              <h4
-                style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#8B6F47", letterSpacing: "0.15em" }}
-                className="text-xs uppercase font-semibold tracking-[0.15em] mb-6"
+              <p
+                className="text-xs tracking-[0.2em] uppercase"
+                style={{ fontFamily: "var(--font-body)", color: "#D4A574" }}
               >
-                Explore
-              </h4>
-              <ul className="space-y-4">
-                {navLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#F5F1EB" }}
-                      className="text-sm hover:text-[#C85A17] transition-colors duration-300 relative group"
-                    >
-                      <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
-                        {link.label}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </FadeInUp>
-          </div>
+                Coffee Co
+              </p>
+            </div>
+            <p
+              className="text-sm leading-relaxed mb-8"
+              style={{ fontFamily: "var(--font-body)", color: "rgba(250,247,242,0.6)", lineHeight: "1.8" }}
+            >
+              Thoughtfully sourced. Carefully brewed. Every cup a ritual, every visit a return to what matters.
+            </p>
+            <div
+              className="w-10 h-px"
+              style={{ background: "#C85A17" }}
+            />
+          </FadeInUp>
+        </div>
 
-          {/* Visit / Contact column */}
-          <div>
-            <FadeInUp delay={200}>
-              <h4
-                style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#8B6F47", letterSpacing: "0.15em" }}
-                className="text-xs uppercase font-semibold tracking-[0.15em] mb-6"
-              >
-                Visit Us
-              </h4>
-              <address className="not-italic space-y-4">
-                <div>
+        {/* Navigation Column */}
+        <div>
+          <FadeInUp delay={100}>
+            <p
+              className="text-xs tracking-[0.2em] uppercase mb-6"
+              style={{ fontFamily: "var(--font-body)", color: "#D4A574" }}
+            >
+              Navigate
+            </p>
+            <nav className="flex flex-col gap-3">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm group flex items-center gap-2"
+                  style={{
+                    fontFamily: "var(--font-body)",
+                    color: "rgba(250,247,242,0.7)",
+                    transition: "color 0.25s var(--ease-out)",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#D4A574")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(250,247,242,0.7)")}
+                >
                   <span
-                    style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#F5F1EB" }}
-                    className="block text-sm leading-relaxed"
-                  >
-                    Sunrise Coffee Co
-                  </span>
-                </div>
-                <div>
-                  <span
-                    style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#D4A574" }}
-                    className="block text-xs uppercase tracking-wider mb-1"
-                  >
-                    Hours
-                  </span>
-                  <span
-                    style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#F5F1EB" }}
-                    className="block text-sm"
-                  >
-                    Mon–Fri: 6am – 6pm
-                  </span>
-                  <span
-                    style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#F5F1EB" }}
-                    className="block text-sm"
-                  >
-                    Sat–Sun: 7am – 5pm
-                  </span>
-                </div>
-              </address>
-            </FadeInUp>
-          </div>
+                    className="w-0 group-hover:w-4 h-px inline-block"
+                    style={{
+                      background: "#C85A17",
+                      transition: "width 0.3s var(--ease-out)",
+                    }}
+                  />
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </FadeInUp>
+        </div>
 
-          {/* Social / Newsletter column */}
-          <div>
-            <FadeInUp delay={200}>
-              <h4
-                style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#8B6F47", letterSpacing: "0.15em" }}
-                className="text-xs uppercase font-semibold tracking-[0.15em] mb-6"
-              >
-                Stay Connected
-              </h4>
-              <div className="flex gap-4 mb-8">
-                {/* Instagram */}
-                <a
-                  href="#"
-                  aria-label="Instagram"
-                  style={{ color: "#D4A574" }}
-                  className="hover:text-[#C85A17] transition-colors duration-300"
+        {/* Visit Column */}
+        <div>
+          <FadeInUp delay={200}>
+            <p
+              className="text-xs tracking-[0.2em] uppercase mb-6"
+              style={{ fontFamily: "var(--font-body)", color: "#D4A574" }}
+            >
+              Visit Us
+            </p>
+            <div className="flex flex-col gap-4">
+              <div>
+                <p
+                  className="text-xs tracking-widest uppercase mb-1"
+                  style={{ fontFamily: "var(--font-body)", color: "rgba(250,247,242,0.4)", letterSpacing: "0.12em" }}
                 >
-                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                    <circle cx="12" cy="12" r="4" />
-                    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-                  </svg>
-                </a>
-                {/* Facebook */}
-                <a
-                  href="#"
-                  aria-label="Facebook"
-                  style={{ color: "#D4A574" }}
-                  className="hover:text-[#C85A17] transition-colors duration-300"
+                  Address
+                </p>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ fontFamily: "var(--font-body)", color: "rgba(250,247,242,0.7)" }}
                 >
-                  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-                  </svg>
-                </a>
-                {/* Pinterest */}
-                <a
-                  href="#"
-                  aria-label="Pinterest"
-                  style={{ color: "#D4A574" }}
-                  className="hover:text-[#C85A17] transition-colors duration-300"
-                >
-                  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z" />
-                  </svg>
-                </a>
+                  Sunrise Coffee Co<br />
+                  Scottsdale, Arizona
+                </p>
               </div>
               <div>
                 <p
-                  style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#D4A574" }}
-                  className="text-xs mb-3 uppercase tracking-wider"
+                  className="text-xs tracking-widest uppercase mb-1"
+                  style={{ fontFamily: "var(--font-body)", color: "rgba(250,247,242,0.4)", letterSpacing: "0.12em" }}
                 >
-                  Morning updates, seasonal offerings
+                  Hours
                 </p>
-                <ShineBorder
-                  borderRadius={0}
-                  borderWidth={1}
-                  duration={6}
-                  color={["#8B6F47", "#C85A17", "#D4A574"]}
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ fontFamily: "var(--font-body)", color: "rgba(250,247,242,0.7)" }}
                 >
-                  <Link
-                    href="/visit"
-                    style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)" }}
-                    className="block px-5 py-3 text-xs uppercase tracking-widest font-semibold text-[#FBF8F3] hover:text-[#D4A574] transition-colors duration-300 text-center"
-                  >
-                    Join Our Community
-                  </Link>
-                </ShineBorder>
+                  Mon – Fri: 6am – 5pm<br />
+                  Sat – Sun: 7am – 4pm
+                </p>
               </div>
-            </FadeInUp>
-          </div>
+            </div>
+          </FadeInUp>
         </div>
 
-        {/* Bottom bar */}
-        <div className="border-t border-[#8B6F47]/30 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p
-            style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#8B6F47" }}
-            className="text-xs tracking-wide"
-          >
-            &copy; {new Date().getFullYear()} Sunrise Coffee Co. All rights reserved.
-          </p>
-          <div className="flex items-center gap-6">
-            <Link
-              href="/"
-              style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#8B6F47" }}
-              className="text-xs hover:text-[#D4A574] transition-colors duration-300"
+        {/* Contact & Social Column */}
+        <div>
+          <FadeInUp delay={200}>
+            <p
+              className="text-xs tracking-[0.2em] uppercase mb-6"
+              style={{ fontFamily: "var(--font-body)", color: "#D4A574" }}
             >
-              Privacy Policy
-            </Link>
-            <span style={{ color: "#8B6F47" }} className="text-xs">&middot;</span>
-            <Link
-              href="/"
-              style={{ fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)", color: "#8B6F47" }}
-              className="text-xs hover:text-[#D4A574] transition-colors duration-300"
+              Connect
+            </p>
+            <div className="flex flex-col gap-3 mb-8">
+              <a
+                href="mailto:"
+                className="text-sm"
+                style={{ fontFamily: "var(--font-body)", color: "rgba(250,247,242,0.7)", transition: "color 0.25s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#D4A574")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(250,247,242,0.7)")}
+              >
+                hello@sunrisecoffeeco.com
+              </a>
+            </div>
+            <p
+              className="text-xs tracking-[0.2em] uppercase mb-4"
+              style={{ fontFamily: "var(--font-body)", color: "rgba(250,247,242,0.4)", letterSpacing: "0.12em" }}
             >
-              Terms of Use
-            </Link>
-          </div>
+              Follow Along
+            </p>
+            <div className="flex gap-4">
+              {["Instagram", "Twitter", "Facebook"].map((social) => (
+                <a
+                  key={social}
+                  href="#"
+                  className="text-xs tracking-widest uppercase"
+                  style={{
+                    fontFamily: "var(--font-body)",
+                    color: "rgba(250,247,242,0.5)",
+                    transition: "color 0.25s var(--ease-out)",
+                    letterSpacing: "0.1em",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#C85A17")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(250,247,242,0.5)")}
+                >
+                  {social}
+                </a>
+              ))}
+            </div>
+          </FadeInUp>
         </div>
+      </div>
+
+      {/* Footer Bottom Bar */}
+      <div
+        style={{ borderTop: "1px solid rgba(212,165,116,0.1)" }}
+        className="max-w-7xl mx-auto px-6 lg:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-3"
+      >
+        <p
+          className="text-xs"
+          style={{
+            fontFamily: "var(--font-body)",
+            color: "rgba(250,247,242,0.35)",
+            letterSpacing: "0.08em",
+          }}
+        >
+          &copy; {currentYear} Sunrise Coffee Co. All rights reserved.
+        </p>
+        <p
+          className="text-xs tracking-widest uppercase"
+          style={{
+            fontFamily: "var(--font-body)",
+            color: "rgba(212,165,116,0.4)",
+            letterSpacing: "0.15em",
+          }}
+        >
+          Specialty Coffee &middot; Scottsdale, AZ
+        </p>
       </div>
     </footer>
   );
@@ -386,22 +406,17 @@ export default function RootLayout({
       className={`${cormorantGaramond.variable} ${sourceSans3.variable}`}
     >
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Sunrise Coffee Co — Specialty Coffee Roasters</title>
-        <meta
-          name="description"
-          content="Sunrise Coffee Co — specialty coffee roasted with intention. Every cup a ritual, every sip a small sunrise."
-        />
+        <title>Sunrise Coffee Co — Specialty Coffee</title>
+        <meta name="description" content="Thoughtfully sourced specialty coffee in Scottsdale, Arizona. Every cup a ritual, every visit a return to what matters." />
       </head>
       <body
         style={{
-          backgroundColor: "#FBF8F3",
-          color: "#2C2416",
-          fontFamily: "var(--font-body, 'Source Sans 3', sans-serif)",
+          background: "#FAF7F2",
+          color: "#2C2418",
+          fontFamily: "var(--font-body), 'Inter', sans-serif",
           margin: 0,
           padding: 0,
-          WebkitFontSmoothing: "antialiased",
-          MozOsxFontSmoothing: "grayscale",
+          overflowX: "hidden",
         }}
       >
         <style>{`
@@ -409,18 +424,18 @@ export default function RootLayout({
             --color-primary: #8B6F47;
             --color-secondary: #D4A574;
             --color-accent: #C85A17;
-            --color-bg: #FBF8F3;
-            --color-text: #2C2416;
-            --color-surface: #F5F1EB;
-            --color-muted: #A89070;
-            --font-heading: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
-            --font-body: 'Source Sans 3', 'Source Sans Pro', 'Inter', system-ui, sans-serif;
-            --space-section: 120px;
-            --space-content: 64px;
-            --space-element: 24px;
-            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-            --duration-fast: 150ms;
-            --duration-normal: 300ms;
+            --color-bg: #FAF7F2;
+            --color-text: #2C2418;
+            --color-surface: #F3EFE7;
+            --color-muted: #9E8E7A;
+            --font-heading: var(--font-heading-var, 'Cormorant Garamond'), 'Playfair Display', Georgia, serif;
+            --font-body: var(--font-body-var, 'Source Sans 3'), 'Inter', system-ui, sans-serif;
+            --space-section: clamp(4rem, 8vw, 7rem);
+            --space-content: clamp(2rem, 4vw, 3.5rem);
+            --space-element: clamp(1rem, 2vw, 1.5rem);
+            --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --duration-fast: 200ms;
+            --duration-normal: 350ms;
             --duration-slow: 600ms;
           }
 
@@ -433,71 +448,68 @@ export default function RootLayout({
           }
 
           body {
-            min-height: 100vh;
-            background-color: var(--color-bg);
-            color: var(--color-text);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
           }
 
           h1, h2, h3, h4, h5, h6 {
             font-family: var(--font-heading);
-            font-weight: 500;
+            color: #2C2418;
             line-height: 1.15;
-            letter-spacing: -0.01em;
+            letter-spacing: 0.01em;
           }
 
-          p, li, a, span, button, input, label {
+          p, a, span, li, button, input, label {
             font-family: var(--font-body);
-            line-height: 1.7;
           }
 
-          img {
-            max-width: 100%;
-            display: block;
+          ::selection {
+            background: #D4A574;
+            color: #2C2418;
+          }
+
+          /* Scrollbar styling */
+          ::-webkit-scrollbar {
+            width: 4px;
+          }
+          ::-webkit-scrollbar-track {
+            background: #FAF7F2;
+          }
+          ::-webkit-scrollbar-thumb {
+            background: #D4A574;
+            border-radius: 2px;
+          }
+
+          /* Pour-over stream accent border animation for coffee cards */
+          .coffee-card-accent {
+            position: relative;
+          }
+          .coffee-card-accent::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2px;
+            height: 40%;
+            background: #C85A17;
+            transition: height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          }
+          .coffee-card-accent:hover::before {
+            height: 100%;
+          }
+
+          /* Organic image hover */
+          .img-hover {
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          }
+          .img-hover:hover {
+            transform: scale(1.03);
           }
 
           a {
             text-decoration: none;
           }
-
-          ::selection {
-            background-color: #D4A574;
-            color: #2C2416;
-          }
-
-          /* Warm image filter utility */
-          .img-sunrise {
-            filter: sepia(12%) saturate(110%) brightness(98%) contrast(103%);
-          }
-
-          /* Pour animation keyframes */
-          @keyframes pour-drop {
-            0% { stroke-dashoffset: 120; opacity: 0; }
-            20% { opacity: 1; }
-            100% { stroke-dashoffset: 0; opacity: 1; }
-          }
-
-          @keyframes subtle-rise {
-            0% { transform: translateY(8px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-          }
-
-          .animate-subtle-rise {
-            animation: subtle-rise 0.6s var(--ease-out) both;
-          }
-
-          /* Scrollbar */
-          ::-webkit-scrollbar {
-            width: 6px;
-          }
-          ::-webkit-scrollbar-track {
-            background: var(--color-bg);
-          }
-          ::-webkit-scrollbar-thumb {
-            background: var(--color-primary);
-            border-radius: 3px;
-          }
         `}</style>
-
         <Nav />
         <main style={{ minHeight: "100vh" }}>{children}</main>
         <Footer />

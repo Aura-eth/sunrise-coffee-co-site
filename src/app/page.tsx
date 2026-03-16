@@ -1,24 +1,20 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import FadeInUp from "@/components/fade-in-up";
 import ShineBorder from "@/components/shine-border";
 import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
 
 export default function HomePage() {
-  const [scrolled, setScrolled] = useState(false);
-  const [pourProgress, setPourProgress] = useState(0);
-  const pourRef = useRef<HTMLDivElement>(null);
+  const [scrollY, setScrollY] = useState(0);
+  const [navScrolled, setNavScrolled] = useState(false);
+  const heroImageRef = useRef<HTMLDivElement>(null);
+  const heroContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 60);
-      if (pourRef.current) {
-        const rect = pourRef.current.getBoundingClientRect();
-        const windowH = window.innerHeight;
-        const progress = Math.min(1, Math.max(0, (windowH - rect.top) / (windowH * 0.7)));
-        setPourProgress(progress);
-      }
+      setScrollY(window.scrollY);
+      setNavScrolled(window.scrollY > 60);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -27,21 +23,22 @@ export default function HomePage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
 
         :root {
-          --font-heading: 'Cormorant Garamond', Georgia, serif;
-          --font-body: 'Source Sans 3', system-ui, sans-serif;
-          --color-primary: #7c4a2d;
-          --color-secondary: #c8855a;
-          --color-accent: #e8a87c;
-          --color-bg: #faf6f1;
-          --color-text: #2a1f16;
-          --color-surface: #f2ebe0;
-          --color-muted: #8a7266;
+          --font-heading: 'Playfair Display', Georgia, serif;
+          --font-body: 'Inter', system-ui, sans-serif;
+          --color-primary: #C85A17;
+          --color-primary-dark: #A34510;
+          --color-bg: #FAF7F2;
+          --color-surface: #F3EDE3;
+          --color-text: #2C1A0E;
+          --color-muted: #7A6352;
+          --color-accent: #C85A17;
+          --color-border: #E5D9CC;
         }
 
-        html { scroll-behavior: smooth; }
+        * { box-sizing: border-box; }
 
         body {
           background-color: var(--color-bg);
@@ -49,998 +46,1063 @@ export default function HomePage() {
           font-family: var(--font-body);
         }
 
-        .heading {
-          font-family: var(--font-heading);
+        .font-heading { font-family: var(--font-heading); }
+        .font-body { font-family: var(--font-body); }
+
+        .nav-glass {
+          background: rgba(250, 247, 242, 0.95);
+          backdrop-filter: blur(12px);
+          border-bottom: 1px solid rgba(229, 217, 204, 0.8);
         }
 
-        .warm-overlay {
-          background: linear-gradient(135deg, rgba(124,74,45,0.15) 0%, rgba(232,168,124,0.08) 100%);
-          mix-blend-mode: multiply;
-          pointer-events: none;
+        .nav-transparent {
+          background: transparent;
+          border-bottom: 1px solid transparent;
         }
 
-        .golden-filter {
-          filter: sepia(20%) saturate(1.2) brightness(1.05);
+        .hero-image-parallax {
+          will-change: transform;
+          transition: transform 0.1s linear;
         }
 
-        .nav-link {
+        .coffee-card {
           position: relative;
-          font-family: var(--font-body);
-          font-size: 0.875rem;
-          font-weight: 500;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: inherit;
-          text-decoration: none;
-          transition: color 0.3s ease;
+          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          overflow: hidden;
         }
 
-        .nav-link::after {
+        .coffee-card::before {
           content: '';
           position: absolute;
-          bottom: -2px;
           left: 0;
-          width: 0;
-          height: 1px;
-          background: var(--color-secondary);
-          transition: width 0.3s ease;
+          top: 0;
+          width: 3px;
+          height: 30%;
+          background: var(--color-accent);
+          transition: height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          border-radius: 0 2px 2px 0;
         }
 
-        .nav-link:hover::after { width: 100%; }
+        .coffee-card:hover::before {
+          height: 100%;
+        }
+
+        .coffee-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 20px 60px rgba(44, 26, 14, 0.12);
+        }
 
         .btn-primary {
-          display: inline-block;
-          padding: 0.9rem 2.2rem;
           background: var(--color-primary);
-          color: #faf6f1;
+          color: #fff;
+          padding: 14px 32px;
+          border-radius: 4px;
           font-family: var(--font-body);
-          font-size: 0.875rem;
           font-weight: 600;
-          letter-spacing: 0.1em;
+          font-size: 0.9rem;
+          letter-spacing: 0.05em;
           text-transform: uppercase;
+          transition: all 0.3s ease;
+          display: inline-block;
           text-decoration: none;
-          border-radius: 2px;
-          transition: background 0.3s ease, transform 0.2s ease;
         }
 
         .btn-primary:hover {
-          background: #5a3520;
+          background: var(--color-primary-dark);
           transform: translateY(-1px);
+          box-shadow: 0 8px 24px rgba(200, 90, 23, 0.3);
         }
 
-        .btn-secondary {
-          display: inline-block;
-          padding: 0.9rem 2.2rem;
+        .btn-outline {
           background: transparent;
-          color: var(--color-primary);
-          font-family: var(--font-body);
-          font-size: 0.875rem;
-          font-weight: 600;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          text-decoration: none;
-          border: 1.5px solid var(--color-primary);
-          border-radius: 2px;
-          transition: all 0.3s ease;
-        }
-
-        .btn-secondary:hover {
-          background: var(--color-primary);
-          color: #faf6f1;
-          transform: translateY(-1px);
-        }
-
-        .btn-light {
-          display: inline-block;
-          padding: 0.9rem 2.2rem;
-          background: #faf6f1;
-          color: var(--color-primary);
-          font-family: var(--font-body);
-          font-size: 0.875rem;
-          font-weight: 600;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          text-decoration: none;
-          border-radius: 2px;
-          transition: all 0.3s ease;
-        }
-
-        .btn-light:hover {
-          background: var(--color-accent);
-          transform: translateY(-1px);
-        }
-
-        .testimonial-card {
-          background: #faf6f1;
-          border: 1px solid rgba(124,74,45,0.12);
+          color: var(--color-text);
+          padding: 13px 32px;
           border-radius: 4px;
-          padding: 2.5rem;
-          position: relative;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          font-family: var(--font-body);
+          font-weight: 600;
+          font-size: 0.9rem;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          transition: all 0.3s ease;
+          display: inline-block;
+          text-decoration: none;
+          border: 1.5px solid var(--color-text);
         }
 
-        .testimonial-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 20px 60px rgba(124,74,45,0.12);
+        .btn-outline:hover {
+          background: var(--color-text);
+          color: var(--color-bg);
+          transform: translateY(-1px);
         }
 
-        .pour-svg path.stream {
-          stroke-dasharray: 300;
-          stroke-dashoffset: 300;
-          transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        .btn-outline-light {
+          background: transparent;
+          color: #fff;
+          padding: 13px 32px;
+          border-radius: 4px;
+          font-family: var(--font-body);
+          font-weight: 600;
+          font-size: 0.9rem;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          transition: all 0.3s ease;
+          display: inline-block;
+          text-decoration: none;
+          border: 1.5px solid rgba(255,255,255,0.7);
         }
 
-        .feature-icon-wrap {
-          width: 64px;
-          height: 64px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, rgba(200,133,90,0.15), rgba(124,74,45,0.08));
-          display: flex;
-          align-items: center;
-          justify-content: center;
+        .btn-outline-light:hover {
+          background: rgba(255,255,255,0.15);
+          border-color: #fff;
+        }
+
+        .icon-feature {
+          transition: transform 0.3s ease;
+        }
+
+        .icon-feature:hover .icon-wrap {
+          transform: scale(1.1);
+          background: rgba(200, 90, 23, 0.15);
+        }
+
+        .icon-wrap {
+          transition: all 0.3s ease;
+        }
+
+        .section-label {
+          font-family: var(--font-body);
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: var(--color-accent);
+        }
+
+        .quote-mark {
+          font-family: var(--font-heading);
+          font-size: 8rem;
+          line-height: 0.6;
+          color: var(--color-accent);
+          opacity: 0.25;
+          display: block;
           margin-bottom: 1.5rem;
         }
 
-        .section-divider {
-          width: 48px;
-          height: 2px;
-          background: var(--color-secondary);
-          margin: 1.25rem 0;
+        .tasting-dot {
+          display: inline-block;
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: var(--color-accent);
+          margin: 0 6px;
+          vertical-align: middle;
+          opacity: 0.6;
         }
 
-        .section-divider-center {
-          width: 48px;
-          height: 2px;
-          background: var(--color-secondary);
-          margin: 1.25rem auto;
+        @keyframes subtle-float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
         }
-
-        .textured-bg {
-          background-color: var(--color-surface);
-          background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%237c4a2d' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-
-        @keyframes fadeSlideUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        .star-fill { color: #c8855a; }
       `}</style>
 
       {/* NAV */}
       <nav
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
-        style={{
-          backgroundColor: scrolled ? "rgba(250,246,241,0.97)" : "transparent",
-          backdropFilter: scrolled ? "blur(12px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(124,74,45,0.12)" : "none",
-        }}
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+          navScrolled ? "nav-glass" : "nav-transparent"
+        )}
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 py-5">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
           <a
             href="/"
-            className="heading text-xl font-medium tracking-wide"
-            style={{ color: scrolled ? "var(--color-text)" : "#faf6f1" }}
+            className="font-heading text-xl font-semibold tracking-wide"
+            style={{
+              color: navScrolled ? "var(--color-text)" : "#fff",
+              textShadow: navScrolled ? "none" : "0 1px 8px rgba(0,0,0,0.3)",
+              transition: "color 0.4s ease",
+            }}
           >
             Sunrise Coffee Co.
           </a>
-          <div className="hidden md:flex items-center gap-10">
+          <div className="hidden md:flex items-center gap-8">
             {[
-              { label: "Coffee", href: "/menu" },
-              { label: "Our Story", href: "/about" },
-              { label: "Visit", href: "#visit" },
+              { label: "Our Story", href: "/story" },
+              { label: "Coffees", href: "/coffee" },
+              { label: "Brew Guide", href: "/brew" },
+              { label: "Visit", href: "/visit" },
             ].map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="nav-link"
-                style={{ color: scrolled ? "var(--color-text)" : "rgba(250,246,241,0.9)" }}
+                className="text-sm font-medium tracking-wide transition-all duration-300 hover:opacity-70"
+                style={{
+                  color: navScrolled ? "var(--color-muted)" : "rgba(255,255,255,0.85)",
+                  textShadow: navScrolled ? "none" : "0 1px 4px rgba(0,0,0,0.2)",
+                  transition: "color 0.4s ease",
+                }}
               >
                 {link.label}
               </a>
             ))}
+            <a
+              href="/visit"
+              className="btn-primary"
+              style={{ padding: "10px 22px", fontSize: "0.8rem" }}
+            >
+              Visit Us
+            </a>
           </div>
-          <a
-            href="/menu"
-            className="hidden md:block"
-            style={{
-              fontFamily: "var(--font-body)",
-              fontSize: "0.8rem",
-              fontWeight: 600,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              padding: "0.6rem 1.5rem",
-              borderRadius: "2px",
-              textDecoration: "none",
-              background: scrolled ? "var(--color-primary)" : "rgba(250,246,241,0.15)",
-              color: "#faf6f1",
-              border: scrolled ? "none" : "1.5px solid rgba(250,246,241,0.5)",
-              backdropFilter: scrolled ? "none" : "blur(8px)",
-              transition: "all 0.3s ease",
-            }}
+          {/* Mobile menu icon */}
+          <button
+            className="md:hidden flex flex-col gap-1.5 p-2"
+            aria-label="Menu"
           >
-            Explore Coffee
-          </a>
+            {[0, 1, 2].map((i) => (
+              <span
+                key={i}
+                className="block w-6 h-0.5 rounded"
+                style={{
+                  background: navScrolled ? "var(--color-text)" : "#fff",
+                  transition: "background 0.4s",
+                }}
+              />
+            ))}
+          </button>
         </div>
       </nav>
 
-      {/* HERO — split-content */}
-      <section id="hero" className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
-        {/* LEFT: text */}
+      {/* HERO SECTION */}
+      <section
+        id="hero"
+        className="relative min-h-screen grid grid-cols-1 lg:grid-cols-2 overflow-hidden"
+      >
+        {/* Left: Image with parallax */}
         <div
-          className="flex items-center px-8 md:px-14 lg:px-20 py-32 lg:py-0 order-2 lg:order-1"
-          style={{ backgroundColor: "var(--color-bg)" }}
+          ref={heroImageRef}
+          className="relative min-h-[55vh] lg:min-h-screen overflow-hidden"
         >
-          <div className="max-w-xl">
-            <div
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "var(--color-secondary)",
-                marginBottom: "1.5rem",
-                display: "block",
-                animation: "fadeSlideUp 0.8s ease 0.1s both",
-              }}
-            >
-              Scottsdale, Arizona · Single-Origin Specialty
-            </div>
-            <h1
-              className="heading"
-              style={{
-                fontSize: "clamp(3rem, 5vw, 4.75rem)",
-                fontWeight: 300,
-                lineHeight: 1.08,
-                letterSpacing: "-0.01em",
-                color: "var(--color-text)",
-                marginBottom: "1.75rem",
-                animation: "fadeSlideUp 0.8s ease 0.2s both",
-              }}
-            >
-              Mornings Begin
-              <br />
-              <em style={{ fontStyle: "italic", color: "var(--color-primary)" }}>with Intention</em>
-            </h1>
-            <div className="section-divider" style={{ animation: "fadeSlideUp 0.8s ease 0.3s both" }} />
-            <p
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: "1.1rem",
-                lineHeight: 1.75,
-                color: "var(--color-muted)",
-                marginBottom: "2.5rem",
-                fontWeight: 300,
-                animation: "fadeSlideUp 0.8s ease 0.4s both",
-              }}
-            >
-              Single-origin pour-overs crafted with precision and purpose.
-              Every cup tells a story from seed to sunrise.
-            </p>
-            <div
-              className="flex flex-col sm:flex-row gap-4"
-              style={{ animation: "fadeSlideUp 0.8s ease 0.5s both" }}
-            >
-              <a href="/menu" className="btn-primary" style={{ textAlign: "center" }}>
-                Explore Our Coffee
-              </a>
-              <a href="#visit" className="btn-secondary" style={{ textAlign: "center" }}>
-                Visit Us
-              </a>
-            </div>
+          <div
+            className="hero-image-parallax absolute inset-0 scale-110"
+            style={{
+              transform: `scale(1.1) translateY(${scrollY * 0.15}px)`,
+            }}
+          >
+            <img
+              src="https://source.unsplash.com/1200x1400/?pour+over+coffee+brewing+close-up+steam+morning+light"
+              alt="Pour-over coffee brewing with steam rising"
+              className="w-full h-full object-cover"
+            />
           </div>
-        </div>
-
-        {/* RIGHT: image */}
-        <div className="relative min-h-[55vh] lg:min-h-screen order-1 lg:order-2 overflow-hidden">
-          <img
-            src="https://source.unsplash.com/1200x1400/?sunrise,mountain,desert,landscape,golden,hour"
-            alt="Sunrise over mountain desert landscape"
-            className="absolute inset-0 w-full h-full object-cover golden-filter"
-          />
+          {/* Warm overlay */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(to bottom, rgba(42,31,22,0.25) 0%, rgba(42,31,22,0.1) 50%, rgba(42,31,22,0.4) 100%)",
+                "linear-gradient(135deg, rgba(44,26,14,0.25) 0%, rgba(200,90,23,0.1) 50%, rgba(44,26,14,0.4) 100%)",
             }}
           />
-          <div className="warm-overlay absolute inset-0" />
-          {/* Floating badge */}
+          {/* Steam/light accent */}
           <div
-            className="absolute bottom-10 left-10 hidden lg:block"
+            className="absolute bottom-0 left-0 right-0 h-32"
             style={{
-              background: "rgba(250,246,241,0.92)",
-              backdropFilter: "blur(12px)",
-              borderRadius: "4px",
-              padding: "1.25rem 1.75rem",
-              borderLeft: "3px solid var(--color-secondary)",
+              background:
+                "linear-gradient(to top, rgba(44,26,14,0.5), transparent)",
+            }}
+          />
+          {/* Small label on image */}
+          <div className="absolute bottom-8 left-8 lg:hidden">
+            <span
+              className="text-xs font-medium uppercase tracking-widest"
+              style={{ color: "rgba(255,255,255,0.7)" }}
+            >
+              Scottsdale, AZ
+            </span>
+          </div>
+        </div>
+
+        {/* Right: Content */}
+        <div
+          ref={heroContentRef}
+          className="relative flex items-center justify-center px-8 md:px-14 lg:px-16 py-24 lg:py-0"
+          style={{
+            background:
+              "linear-gradient(160deg, #FAF7F2 0%, #F0E8DC 40%, #EAD9C5 100%)",
+          }}
+        >
+          {/* Subtle parallax on content (opposite direction) */}
+          <div
+            className="max-w-lg w-full"
+            style={{
+              transform: `translateY(${scrollY * -0.04}px)`,
+              transition: "transform 0.1s linear",
             }}
           >
-            <div
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: "0.7rem",
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: "var(--color-muted)",
-                marginBottom: "0.25rem",
-              }}
-            >
-              Current Origin
-            </div>
-            <div
-              className="heading"
-              style={{ fontSize: "1.1rem", fontWeight: 500, color: "var(--color-text)" }}
-            >
-              Ethiopia Yirgacheffe
-            </div>
-            <div
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: "0.8rem",
-                color: "var(--color-muted)",
-                marginTop: "0.15rem",
-              }}
-            >
-              Jasmine · Bergamot · Stone Fruit
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FEATURE HIGHLIGHT */}
-      <section
-        id="why-sunrise"
-        className="py-28 md:py-36 px-6"
-        style={{ backgroundColor: "var(--color-bg)" }}
-      >
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-20">
             <FadeInUp delay={0}>
-              <span
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: "var(--color-secondary)",
-                  display: "block",
-                  marginBottom: "1rem",
-                }}
-              >
-                Our Philosophy
-              </span>
+              <span className="section-label block mb-6">Scottsdale, Arizona</span>
             </FadeInUp>
             <FadeInUp delay={100}>
-              <h2
-                className="heading"
+              <h1
+                className="font-heading mb-6 leading-tight"
                 style={{
-                  fontSize: "clamp(2.5rem, 4vw, 3.75rem)",
-                  fontWeight: 300,
-                  lineHeight: 1.1,
+                  fontSize: "clamp(2.8rem, 5vw, 4.5rem)",
                   color: "var(--color-text)",
+                  fontWeight: 700,
                 }}
               >
-                Why Sunrise Coffee
-              </h2>
+                Sunrise,
+                <br />
+                <em style={{ color: "var(--color-accent)", fontStyle: "italic" }}>
+                  Sip by Sip.
+                </em>
+              </h1>
             </FadeInUp>
             <FadeInUp delay={200}>
-              <div className="section-divider-center" style={{ marginTop: "1.25rem" }} />
+              <p
+                className="mb-10 leading-relaxed"
+                style={{
+                  fontSize: "1.1rem",
+                  color: "var(--color-muted)",
+                  lineHeight: 1.8,
+                  maxWidth: "42ch",
+                }}
+              >
+                Single-origin pour-overs, hand-crafted daily in Scottsdale. Each
+                cup tells the story of where it came from.
+              </p>
+            </FadeInUp>
+            <FadeInUp delay={300}>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a href="/visit" className="btn-primary" style={{ textAlign: "center" }}>
+                  Visit Us
+                </a>
+                <a href="/coffee" className="btn-outline" style={{ textAlign: "center" }}>
+                  Explore Our Coffees
+                </a>
+              </div>
+            </FadeInUp>
+            <FadeInUp delay={400}>
+              <div
+                className="mt-12 pt-10 flex gap-10"
+                style={{ borderTop: "1px solid var(--color-border)" }}
+              >
+                {[
+                  { num: "12+", label: "Origins Monthly" },
+                  { num: "100%", label: "Hand Poured" },
+                  { num: "Farm\u2011to\u2011Cup", label: "Transparency" },
+                ].map((stat) => (
+                  <div key={stat.label}>
+                    <div
+                      className="font-heading font-bold"
+                      style={{ fontSize: "1.3rem", color: "var(--color-text)" }}
+                    >
+                      {stat.num}
+                    </div>
+                    <div
+                      className="text-xs uppercase tracking-widest mt-1"
+                      style={{ color: "var(--color-muted)" }}
+                    >
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </FadeInUp>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-16">
-            {[
-              {
-                icon: (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
-                    <path d="M12 8v4l3 3" />
-                    <circle cx="12" cy="12" r="3" fill="var(--color-accent)" fillOpacity="0.4" />
-                  </svg>
-                ),
-                title: "Single-Origin Excellence",
-                description:
-                  "We source directly from small farms across Africa and South America, ensuring traceability from soil to cup.",
-                delay: 0,
-              },
-              {
-                icon: (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
-                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
-                    <line x1="6" y1="1" x2="6" y2="4" />
-                    <line x1="10" y1="1" x2="10" y2="4" />
-                    <line x1="14" y1="1" x2="14" y2="4" />
-                  </svg>
-                ),
-                title: "The Pour-Over Ritual",
-                description:
-                  "More than a brewing method—a meditation. We've refined the craft so you experience the full complexity of each origin.",
-                delay: 150,
-              },
-              {
-                icon: (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                  </svg>
-                ),
-                title: "A Third Place",
-                description:
-                  "Not your home. Not your office. A warm, welcoming space designed for connection, focus, and community.",
-                delay: 300,
-              },
-            ].map((feature) => (
-              <FadeInUp key={feature.title} delay={feature.delay}>
-                <div className="text-center md:text-left">
-                  <div className="feature-icon-wrap mx-auto md:mx-0">
-                    {feature.icon}
-                  </div>
-                  <h3
-                    className="heading"
-                    style={{
-                      fontSize: "1.6rem",
-                      fontWeight: 400,
-                      color: "var(--color-text)",
-                      marginBottom: "1rem",
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {feature.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-body)",
-                      fontSize: "1rem",
-                      lineHeight: 1.8,
-                      color: "var(--color-muted)",
-                      fontWeight: 300,
-                    }}
-                  >
-                    {feature.description}
-                  </p>
-                </div>
-              </FadeInUp>
-            ))}
-          </div>
-
-          {/* Pour animation accent */}
-          <div ref={pourRef} className="flex justify-center mt-24">
-            <svg
-              width="120"
-              height="160"
-              viewBox="0 0 120 160"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
+          {/* Vertical text decoration */}
+          <div
+            className="hidden lg:block absolute right-8 top-1/2 -translate-y-1/2"
+            style={{ writingMode: "vertical-rl" }}
+          >
+            <span
+              className="text-xs uppercase tracking-widest"
+              style={{ color: "var(--color-border)", letterSpacing: "0.25em" }}
             >
-              {/* Dripper cone outline */}
-              <path
-                d="M20 20 L60 110 L100 20 Z"
-                stroke="rgba(124,74,45,0.2)"
-                strokeWidth="1.5"
-                fill="rgba(200,133,90,0.05)"
-              />
-              {/* Stream */}
-              <path
-                className="stream"
-                d="M60 110 Q58 125 60 140 Q62 150 60 155"
-                stroke="var(--color-secondary)"
-                strokeWidth="2"
-                fill="none"
-                style={{
-                  strokeDashoffset: 300 * (1 - pourProgress),
-                  transition: "stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1)",
-                }}
-              />
-              {/* Cup outline */}
-              <path
-                d="M42 155 Q42 158 60 158 Q78 158 78 155 L78 142 Q78 140 60 140 Q42 140 42 142 Z"
-                stroke="rgba(124,74,45,0.3)"
-                strokeWidth="1.5"
-                fill="rgba(200,133,90,0.08)"
-              />
-              {/* Water fill in cup */}
-              <rect
-                x="43"
-                y={158 - (pourProgress * 16)}
-                width="34"
-                height={pourProgress * 16}
-                fill="rgba(200,133,90,0.2)"
-                rx="1"
-                style={{ transition: "all 1.4s cubic-bezier(0.4,0,0.2,1)" }}
-              />
-            </svg>
+              Est. 2018 · Scottsdale
+            </span>
           </div>
         </div>
       </section>
 
-      {/* ATMOSPHERE — full-bleed */}
+      {/* ATMOSPHERE SECTION */}
       <section
         id="atmosphere"
-        className="relative overflow-hidden"
-        style={{ height: "70vh", minHeight: "500px" }}
+        className="relative flex items-center justify-center overflow-hidden"
+        style={{ height: "65vh", minHeight: "420px" }}
       >
-        <img
-          src="https://source.unsplash.com/2000x1200/?coffee,shop,interior,warm,wood,light,specialty"
-          alt="Sunrise Coffee interior — light streaming through windows, wooden bar, pour-over in motion"
-          className="absolute inset-0 w-full h-full object-cover golden-filter"
-          style={{ backgroundAttachment: "fixed" }}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "url('https://source.unsplash.com/1800x900/?specialty+coffee+shop+interior+warm+wooden+tables+natural+light')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+          }}
         />
+        {/* Multi-layer warm overlay */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, rgba(42,31,22,0.2) 0%, rgba(42,31,22,0.55) 100%)",
+              "linear-gradient(to right, rgba(44,26,14,0.72) 0%, rgba(44,26,14,0.45) 50%, rgba(44,26,14,0.65) 100%)",
           }}
         />
-        <div className="warm-overlay absolute inset-0" />
-        <div className="relative h-full flex flex-col items-center justify-end pb-16 px-6 text-center">
+        <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
           <FadeInUp delay={0}>
-            <p
-              className="heading"
-              style={{
-                fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
-                fontWeight: 300,
-                fontStyle: "italic",
-                color: "rgba(250,246,241,0.9)",
-                letterSpacing: "0.02em",
-                maxWidth: "560px",
-              }}
+            <span
+              className="block text-xs uppercase tracking-widest mb-5"
+              style={{ color: "rgba(200,90,23,0.9)" }}
             >
-              A space where time slows and every detail is intentional.
-            </p>
+              The Experience
+            </span>
           </FadeInUp>
-          <FadeInUp delay={150}>
-            <a
-              href="#visit"
+          <FadeInUp delay={100}>
+            <h2
+              className="font-heading"
               style={{
-                marginTop: "1.75rem",
-                display: "inline-block",
-                fontFamily: "var(--font-body)",
-                fontSize: "0.8rem",
+                fontSize: "clamp(2.2rem, 5vw, 4rem)",
+                color: "#fff",
                 fontWeight: 600,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: "rgba(250,246,241,0.7)",
-                textDecoration: "none",
-                borderBottom: "1px solid rgba(250,246,241,0.3)",
-                paddingBottom: "2px",
-                transition: "color 0.3s ease, border-color 0.3s ease",
+                lineHeight: 1.2,
+                letterSpacing: "-0.01em",
               }}
             >
-              Come Experience It →
-            </a>
+              Where Craft Meets
+              <br />
+              <em style={{ color: "rgba(240,210,170,0.95)" }}>Community.</em>
+            </h2>
+          </FadeInUp>
+          <FadeInUp delay={200}>
+            <div
+              className="mx-auto mt-8"
+              style={{
+                width: "48px",
+                height: "2px",
+                background: "var(--color-accent)",
+                opacity: 0.8,
+              }}
+            />
           </FadeInUp>
         </div>
       </section>
 
-      {/* SOCIAL PROOF — card grid */}
+      {/* FEATURE HIGHLIGHT SECTION */}
       <section
-        id="community"
-        className="py-28 md:py-36 px-6 textured-bg"
+        id="feature-highlight"
+        className="py-24 md:py-32 px-6"
+        style={{ background: "var(--color-bg)" }}
       >
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-20">
+          <div className="text-center mb-16 md:mb-20">
             <FadeInUp delay={0}>
-              <span
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: "var(--color-secondary)",
-                  display: "block",
-                  marginBottom: "1rem",
-                }}
-              >
-                Voices from Our Community
-              </span>
+              <span className="section-label block mb-4">What Sets Us Apart</span>
             </FadeInUp>
             <FadeInUp delay={100}>
               <h2
-                className="heading"
+                className="font-heading"
                 style={{
-                  fontSize: "clamp(2.25rem, 3.5vw, 3.5rem)",
-                  fontWeight: 300,
-                  lineHeight: 1.1,
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
                   color: "var(--color-text)",
+                  fontWeight: 600,
                 }}
               >
-                What Our Community Says
+                The Sunrise Difference
               </h2>
-            </FadeInUp>
-            <FadeInUp delay={200}>
-              <div className="section-divider-center" />
             </FadeInUp>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 lg:gap-16">
+            {/* Feature 1 */}
+            <FadeInUp delay={0}>
+              <div className="icon-feature text-center md:text-left">
+                <div
+                  className="icon-wrap inline-flex items-center justify-center mb-6 rounded-2xl"
+                  style={{
+                    width: "64px",
+                    height: "64px",
+                    background: "rgba(200,90,23,0.08)",
+                    border: "1px solid rgba(200,90,23,0.15)",
+                  }}
+                >
+                  {/* Single origin icon - globe/pin */}
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 28 28"
+                    fill="none"
+                    stroke="var(--color-accent)"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="14" cy="14" r="11" />
+                    <path d="M3 14h22" />
+                    <path d="M14 3c-3.5 4-3.5 14 0 22" />
+                    <path d="M14 3c3.5 4 3.5 14 0 22" />
+                  </svg>
+                </div>
+                <h3
+                  className="font-heading mb-3"
+                  style={{
+                    fontSize: "1.35rem",
+                    fontWeight: 600,
+                    color: "var(--color-text)",
+                  }}
+                >
+                  Single-Origin Sourcing
+                </h3>
+                <p
+                  className="leading-relaxed"
+                  style={{
+                    color: "var(--color-muted)",
+                    lineHeight: 1.75,
+                    fontSize: "0.95rem",
+                  }}
+                >
+                  Every coffee comes from a single farm, region, or micro-lot. We
+                  know exactly where your beans come from.
+                </p>
+              </div>
+            </FadeInUp>
+
+            {/* Feature 2 */}
+            <FadeInUp delay={100}>
+              <div className="icon-feature text-center md:text-left">
+                <div
+                  className="icon-wrap inline-flex items-center justify-center mb-6 rounded-2xl"
+                  style={{
+                    width: "64px",
+                    height: "64px",
+                    background: "rgba(200,90,23,0.08)",
+                    border: "1px solid rgba(200,90,23,0.15)",
+                  }}
+                >
+                  {/* Pour-over icon */}
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 28 28"
+                    fill="none"
+                    stroke="var(--color-accent)"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M8 4h12l-3 10H11L8 4z" />
+                    <path d="M11 14v6" />
+                    <path d="M17 14v6" />
+                    <ellipse cx="14" cy="22" rx="5" ry="2" />
+                    <path d="M14 8v4" />
+                    <path d="M11 8c1 1.5 3 1.5 6 0" />
+                  </svg>
+                </div>
+                <h3
+                  className="font-heading mb-3"
+                  style={{
+                    fontSize: "1.35rem",
+                    fontWeight: 600,
+                    color: "var(--color-text)",
+                  }}
+                >
+                  Hand-Pour Ritual
+                </h3>
+                <p
+                  className="leading-relaxed"
+                  style={{
+                    color: "var(--color-muted)",
+                    lineHeight: 1.75,
+                    fontSize: "0.95rem",
+                  }}
+                >
+                  No espresso machines. Each cup is poured by hand over ceramic,
+                  bringing intention to every brew.
+                </p>
+              </div>
+            </FadeInUp>
+
+            {/* Feature 3 */}
+            <FadeInUp delay={200}>
+              <div className="icon-feature text-center md:text-left">
+                <div
+                  className="icon-wrap inline-flex items-center justify-center mb-6 rounded-2xl"
+                  style={{
+                    width: "64px",
+                    height: "64px",
+                    background: "rgba(200,90,23,0.08)",
+                    border: "1px solid rgba(200,90,23,0.15)",
+                  }}
+                >
+                  {/* Transparency/document icon */}
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 28 28"
+                    fill="none"
+                    stroke="var(--color-accent)"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="5" y="3" width="18" height="22" rx="2" />
+                    <path d="M9 9h10" />
+                    <path d="M9 13h10" />
+                    <path d="M9 17h6" />
+                    <circle cx="21" cy="21" r="4" fill="var(--color-bg)" stroke="var(--color-accent)" strokeWidth="1.5" />
+                    <path d="M21 19.5v1.5l1 1" />
+                  </svg>
+                </div>
+                <h3
+                  className="font-heading mb-3"
+                  style={{
+                    fontSize: "1.35rem",
+                    fontWeight: 600,
+                    color: "var(--color-text)",
+                  }}
+                >
+                  Complete Transparency
+                </h3>
+                <p
+                  className="leading-relaxed"
+                  style={{
+                    color: "var(--color-muted)",
+                    lineHeight: 1.75,
+                    fontSize: "0.95rem",
+                  }}
+                >
+                  Farm details, altitude, processing method, roast date—we tell
+                  you everything about your coffee.
+                </p>
+              </div>
+            </FadeInUp>
+          </div>
+        </div>
+      </section>
+
+      {/* MENU SHOWCASE SECTION */}
+      <section
+        id="menu-showcase"
+        className="py-24 md:py-32 px-6"
+        style={{ background: "var(--color-surface)" }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-5">
+            <FadeInUp delay={0}>
+              <span className="section-label block mb-4">Single Origin</span>
+            </FadeInUp>
+            <FadeInUp delay={100}>
+              <h2
+                className="font-heading"
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  color: "var(--color-text)",
+                  fontWeight: 600,
+                }}
+              >
+                This Month&#39;s Featured Origins
+              </h2>
+            </FadeInUp>
+            <FadeInUp delay={150}>
+              <p
+                className="mt-4 max-w-xl mx-auto"
+                style={{
+                  color: "var(--color-muted)",
+                  fontSize: "1rem",
+                  lineHeight: 1.7,
+                }}
+              >
+                Carefully selected single-origin coffees, freshly roasted
+              </p>
+            </FadeInUp>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-14">
             {[
               {
-                quote:
-                  "The first pour-over I've had that made me understand why coffee matters. Every cup tastes like care.",
-                author: "Sarah K.",
-                delay: 0,
+                origin: "Ethiopia, Yirgacheffe",
+                country: "Ethiopia",
+                notes: "Floral, berry, bright acidity",
+                brewing: "Pour-over recommended",
+                img: "https://source.unsplash.com/600x400/?ethiopia+coffee+farm+landscape",
               },
               {
-                quote:
-                  "This is the place I go to think, to work, to just be. The coffee is exceptional, but the space is sacred.",
-                author: "Marcus T.",
-                delay: 100,
+                origin: "Colombia, Geisha",
+                country: "Colombia",
+                notes: "Chocolate, stone fruit, balanced",
+                brewing: "Pour-over or French press",
+                img: "https://source.unsplash.com/600x400/?colombia+coffee+beans+farm",
               },
               {
-                quote:
-                  "Finally found a coffee shop that respects the craft. The baristas actually know where the beans come from.",
-                author: "Jennifer L.",
-                delay: 150,
+                origin: "Kenya, AA Grade",
+                country: "Kenya",
+                notes: "Citrus, black tea, crisp finish",
+                brewing: "Pour-over ideal",
+                img: "https://source.unsplash.com/600x400/?kenya+coffee+plantation",
               },
               {
-                quote:
-                  "It's become my morning ritual. I'm not just buying coffee—I'm supporting farmers and experiencing something real.",
-                author: "David M.",
-                delay: 200,
+                origin: "Guatemala, Huehuetenango",
+                country: "Guatemala",
+                notes: "Nutty, caramel, full body",
+                brewing: "Pour-over or immersion",
+                img: "https://source.unsplash.com/600x400/?guatemala+coffee+mountain",
               },
-            ].map((t) => (
-              <FadeInUp key={t.author} delay={t.delay}>
-                <div className="testimonial-card">
-                  {/* Stars */}
-                  <div className="flex gap-1 mb-5">
-                    {[...Array(5)].map((_, i) => (
-                      <svg
-                        key={i}
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="var(--color-secondary)"
-                      >
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                      </svg>
-                    ))}
-                  </div>
-                  {/* Quote mark */}
+            ].map((item, i) => (
+              <FadeInUp key={item.origin} delay={i * 80}>
+                <div
+                  className="coffee-card rounded-xl overflow-hidden"
+                  style={{
+                    background: "#fff",
+                    boxShadow: "0 4px 24px rgba(44,26,14,0.07)",
+                    border: "1px solid var(--color-border)",
+                  }}
+                >
                   <div
-                    className="heading"
-                    style={{
-                      fontSize: "4rem",
-                      lineHeight: 0.8,
-                      color: "var(--color-accent)",
-                      marginBottom: "0.5rem",
-                      display: "block",
-                    }}
+                    className="relative overflow-hidden"
+                    style={{ height: "200px" }}
                   >
-                    &#8220;
-                  </div>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-body)",
-                      fontSize: "1.05rem",
-                      lineHeight: 1.75,
-                      color: "var(--color-text)",
-                      fontWeight: 300,
-                      marginBottom: "1.75rem",
-                    }}
-                  >
-                    {t.quote}
-                  </p>
-                  <div className="flex items-center gap-3">
+                    <img
+                      src={item.img}
+                      alt={item.origin}
+                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                    />
                     <div
+                      className="absolute inset-0"
                       style={{
-                        width: "2px",
-                        height: "32px",
-                        background: "var(--color-secondary)",
-                        borderRadius: "1px",
+                        background:
+                          "linear-gradient(to top, rgba(44,26,14,0.5) 0%, transparent 60%)",
                       }}
                     />
                     <span
+                      className="absolute bottom-3 left-5 text-xs font-semibold uppercase tracking-widest"
+                      style={{ color: "rgba(255,255,255,0.85)" }}
+                    >
+                      {item.country}
+                    </span>
+                  </div>
+                  <div className="p-6">
+                    <h3
+                      className="font-heading mb-3"
                       style={{
-                        fontFamily: "var(--font-body)",
-                        fontSize: "0.9rem",
+                        fontSize: "1.05rem",
                         fontWeight: 600,
-                        letterSpacing: "0.06em",
                         color: "var(--color-text)",
+                        lineHeight: 1.3,
                       }}
                     >
-                      {t.author}
-                    </span>
+                      {item.origin}
+                    </h3>
+                    <div
+                      className="mb-3 pb-3"
+                      style={{ borderBottom: "1px solid var(--color-border)" }}
+                    >
+                      {item.notes.split(", ").map((note, ni) => (
+                        <span key={note}>
+                          {ni > 0 && <span className="tasting-dot" />}
+                          <span
+                            style={{
+                              fontSize: "0.8rem",
+                              color: "var(--color-muted)",
+                            }}
+                          >
+                            {note}
+                          </span>
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        stroke="var(--color-accent)"
+                        strokeWidth="1.5"
+                      >
+                        <path d="M2 6h8" />
+                        <path d="M8 3l3 3-3 3" />
+                      </svg>
+                      <span
+                        style={{
+                          fontSize: "0.75rem",
+                          color: "var(--color-accent)",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {item.brewing}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </FadeInUp>
             ))}
           </div>
+
+          <FadeInUp delay={200}>
+            <div className="text-center mt-14">
+              <a href="/coffee" className="btn-primary">
+                View Full Menu
+              </a>
+            </div>
+          </FadeInUp>
         </div>
       </section>
 
-      {/* BOOKING CTA */}
+      {/* SECOND ATMOSPHERE / VISUAL BREAK */}
       <section
-        id="visit"
-        className="relative overflow-hidden"
+        className="relative py-16 overflow-hidden"
+        style={{ background: "var(--color-text)" }}
       >
-        <img
-          src="https://source.unsplash.com/2000x900/?coffee,farmer,harvest,origin,Africa"
-          alt="Coffee origin farm landscape"
-          className="absolute inset-0 w-full h-full object-cover golden-filter"
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(42,31,22,0.92) 0%, rgba(82,46,26,0.88) 60%, rgba(42,31,22,0.75) 100%)",
-          }}
-        />
-
-        <div className="relative py-28 md:py-36 px-6">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-
-              {/* Left: invite */}
-              <div>
-                <FadeInUp delay={0}>
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-0">
+          {[
+            {
+              img: "https://source.unsplash.com/600x400/?barista+pouring+coffee+pour-over+ceramic",
+              label: "The Pour",
+            },
+            {
+              img: "https://source.unsplash.com/600x400/?coffee+beans+close+up+roasted",
+              label: "The Beans",
+            },
+            {
+              img: "https://source.unsplash.com/600x400/?coffee+shop+morning+light+community",
+              label: "The Moment",
+            },
+          ].map((item, i) => (
+            <FadeInUp key={item.label} delay={i * 100}>
+              <div className="relative overflow-hidden group" style={{ height: "280px" }}>
+                <img
+                  src={item.img}
+                  alt={item.label}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div
+                  className="absolute inset-0 flex items-end p-6"
+                  style={{
+                    background:
+                      "linear-gradient(to top, rgba(44,26,14,0.7) 0%, transparent 60%)",
+                  }}
+                >
                   <span
-                    style={{
-                      fontFamily: "var(--font-body)",
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                      letterSpacing: "0.2em",
-                      textTransform: "uppercase",
-                      color: "var(--color-accent)",
-                      display: "block",
-                      marginBottom: "1rem",
-                    }}
+                    className="font-heading italic"
+                    style={{ color: "rgba(255,255,255,0.9)", fontSize: "1.2rem" }}
                   >
-                    Come Find Us
+                    {item.label}
                   </span>
-                </FadeInUp>
-                <FadeInUp delay={100}>
-                  <h2
-                    className="heading"
-                    style={{
-                      fontSize: "clamp(2.5rem, 4vw, 3.75rem)",
-                      fontWeight: 300,
-                      lineHeight: 1.1,
-                      color: "#faf6f1",
-                      marginBottom: "1.25rem",
-                    }}
-                  >
-                    Visit Sunrise Coffee
-                  </h2>
-                </FadeInUp>
-                <FadeInUp delay={200}>
-                  <div
-                    style={{
-                      width: "48px",
-                      height: "2px",
-                      background: "var(--color-secondary)",
-                      marginBottom: "1.75rem",
-                    }}
-                  />
-                  <p
-                    style={{
-                      fontFamily: "var(--font-body)",
-                      fontSize: "1.1rem",
-                      lineHeight: 1.75,
-                      color: "rgba(250,246,241,0.75)",
-                      fontWeight: 300,
-                      marginBottom: "2.5rem",
-                      maxWidth: "420px",
-                    }}
-                  >
-                    We're located in Scottsdale, open daily. Come experience the craft.
-                  </p>
-                </FadeInUp>
-                <FadeInUp delay={300}>
-                  <ShineBorder
-                    borderRadius={2}
-                    borderWidth={1}
-                    duration={6}
-                    color={["#c8855a", "#e8a87c", "#7c4a2d"]}
-                  >
-                    <a
-                      href="https://maps.google.com/?q=Scottsdale,AZ"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-light"
-                      style={{ display: "block" }}
-                    >
-                      Get Directions
-                    </a>
-                  </ShineBorder>
-                </FadeInUp>
+                </div>
               </div>
+            </FadeInUp>
+          ))}
+        </div>
+      </section>
 
-              {/* Right: info */}
-              <div>
-                <FadeInUp delay={100}>
+      {/* SOCIAL PROOF SECTION */}
+      <section
+        id="social-proof"
+        className="py-24 md:py-36 px-6"
+        style={{
+          background:
+            "linear-gradient(135deg, #F5EDE0 0%, #EDE0CE 50%, #F0E6D6 100%)",
+        }}
+      >
+        <div className="max-w-4xl mx-auto text-center">
+          <FadeInUp delay={0}>
+            <span className="section-label block mb-6">Loved by Our Community</span>
+          </FadeInUp>
+          <FadeInUp delay={100}>
+            <span className="quote-mark">&ldquo;</span>
+          </FadeInUp>
+          <FadeInUp delay={150}>
+            <ShineBorder
+              borderRadius={16}
+              borderWidth={1}
+              duration={8}
+              color={["#C85A17", "#E8A87C", "#C85A17"]}
+            >
+              <div
+                className="px-8 md:px-14 py-10 md:py-14"
+                style={{ background: "rgba(250,247,242,0.7)" }}
+              >
+                <blockquote
+                  className="font-heading"
+                  style={{
+                    fontSize: "clamp(1.3rem, 3vw, 2rem)",
+                    fontWeight: 400,
+                    fontStyle: "italic",
+                    color: "var(--color-text)",
+                    lineHeight: 1.65,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  Coming here isn&#39;t just about great coffee—it&#39;s about
+                  being present for 15 minutes. The whole ritual has changed how
+                  I start my day.
+                </blockquote>
+                <div
+                  className="mt-8 flex items-center justify-center gap-4"
+                >
                   <div
-                    style={{
-                      background: "rgba(250,246,241,0.06)",
-                      backdropFilter: "blur(12px)",
-                      borderRadius: "4px",
-                      border: "1px solid rgba(250,246,241,0.1)",
-                      padding: "2.5rem",
-                    }}
+                    className="w-10 h-10 rounded-full overflow-hidden flex-none"
+                    style={{ border: "2px solid var(--color-accent)" }}
                   >
-                    {[
-                      {
-                        label: "Hours",
-                        icon: (
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="1.5" strokeLinecap="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M12 6v6l4 2" />
-                          </svg>
-                        ),
-                        value: "Monday–Friday: 6am–7pm",
-                        value2: "Saturday–Sunday: 7am–6pm",
-                      },
-                      {
-                        label: "Address",
-                        icon: (
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="1.5" strokeLinecap="round">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                            <circle cx="12" cy="10" r="3" />
-                          </svg>
-                        ),
-                        value: "Scottsdale, AZ",
-                        value2: null,
-                      },
-                      {
-                        label: "Phone",
-                        icon: (
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="1.5" strokeLinecap="round">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.25h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.92a16 16 0 0 0 6.29 6.29l.94-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-                          </svg>
-                        ),
-                        value: "Contact form available",
-                        value2: null,
-                      },
-                    ].map((item, i) => (
-                      <div
-                        key={item.label}
-                        style={{
-                          display: "flex",
-                          gap: "1rem",
-                          paddingBottom: i < 2 ? "1.75rem" : "0",
-                          marginBottom: i < 2 ? "1.75rem" : "0",
-                          borderBottom: i < 2 ? "1px solid rgba(250,246,241,0.08)" : "none",
-                          alignItems: "flex-start",
-                        }}
-                      >
-                        <div
-                          style={{
-                            marginTop: "2px",
-                            flexShrink: 0,
-                          }}
-                        >
-                          {item.icon}
-                        </div>
-                        <div>
-                          <div
-                            style={{
-                              fontFamily: "var(--font-body)",
-                              fontSize: "0.7rem",
-                              fontWeight: 600,
-                              letterSpacing: "0.18em",
-                              textTransform: "uppercase",
-                              color: "var(--color-accent)",
-                              marginBottom: "0.4rem",
-                            }}
-                          >
-                            {item.label}
-                          </div>
-                          <div
-                            style={{
-                              fontFamily: "var(--font-body)",
-                              fontSize: "1rem",
-                              color: "rgba(250,246,241,0.85)",
-                              fontWeight: 300,
-                              lineHeight: 1.6,
-                            }}
-                          >
-                            {item.value}
-                            {item.value2 && (
-                              <>
-                                <br />
-                                {item.value2}
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                    <img
+                      src="https://source.unsplash.com/80x80/?portrait+woman+smile"
+                      alt="Sarah M."
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                </FadeInUp>
+                  <div className="text-left">
+                    <div
+                      className="font-semibold"
+                      style={{
+                        fontSize: "0.9rem",
+                        color: "var(--color-text)",
+                      }}
+                    >
+                      Sarah M.
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "0.78rem",
+                        color: "var(--color-muted)",
+                        letterSpacing: "0.04em",
+                      }}
+                    >
+                      Regular · Scottsdale
+                    </div>
+                  </div>
+                </div>
               </div>
+            </ShineBorder>
+          </FadeInUp>
+
+          <FadeInUp delay={250}>
+            <div className="mt-12">
+              <a
+                href="/visit"
+                className="btn-primary"
+                style={{ marginRight: "16px" }}
+              >
+                Visit Us
+              </a>
+              <a href="/coffee" className="btn-outline">
+                Our Story
+              </a>
             </div>
-          </div>
+          </FadeInUp>
         </div>
       </section>
 
       {/* FOOTER */}
       <footer
-        style={{
-          backgroundColor: "var(--color-text)",
-          color: "rgba(250,246,241,0.7)",
-          padding: "3rem 1.5rem",
-        }}
+        className="pt-16 pb-8 px-6"
+        style={{ background: "var(--color-text)" }}
       >
-        <div
-          className="max-w-6xl mx-auto"
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: "1.5rem",
-          }}
-        >
-          <div>
-            <div
-              className="heading"
-              style={{
-                fontSize: "1.25rem",
-                fontWeight: 400,
-                color: "#faf6f1",
-                marginBottom: "0.4rem",
-              }}
-            >
-              Sunrise Coffee Co.
-            </div>
-            <div
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: "0.85rem",
-                fontWeight: 300,
-              }}
-            >
-              Scottsdale, AZ · Single-Origin Specialty Coffee
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-8">
-            {[
-              { label: "Coffee Menu", href: "/menu" },
-              { label: "Our Story", href: "/about" },
-              { label: "Visit Us", href: "#visit" },
-            ].map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+            <div className="md:col-span-2">
+              <div
+                className="font-heading text-2xl font-semibold mb-4"
+                style={{ color: "#fff" }}
+              >
+                Sunrise Coffee Co.
+              </div>
+              <p
+                className="leading-relaxed mb-6"
                 style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: "0.8rem",
-                  fontWeight: 500,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  color: "rgba(250,246,241,0.6)",
-                  textDecoration: "none",
-                  transition: "color 0.3s ease",
-                }}
-                onMouseEnter={(e) => {
-                  (e.target as HTMLAnchorElement).style.color = "var(--color-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.target as HTMLAnchorElement).style.color = "rgba(250,246,241,0.6)";
+                  color: "rgba(255,255,255,0.55)",
+                  fontSize: "0.9rem",
+                  maxWidth: "36ch",
+                  lineHeight: 1.7,
                 }}
               >
-                {link.label}
-              </a>
-            ))}
+                Single-origin pour-overs, hand-crafted daily in Scottsdale. A
+                ritual worth waking up for.
+              </p>
+              <div className="flex gap-4">
+                {["Instagram", "Twitter"].map((social) => (
+                  <a
+                    key={social}
+                    href="#"
+                    className="text-xs font-medium uppercase tracking-widest transition-opacity hover:opacity-100"
+                    style={{ color: "rgba(255,255,255,0.45)", opacity: 0.6 }}
+                  >
+                    {social}
+                  </a>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4
+                className="text-xs uppercase tracking-widest font-semibold mb-5"
+                style={{ color: "rgba(255,255,255,0.5)" }}
+              >
+                Explore
+              </h4>
+              <ul className="space-y-3">
+                {[
+                  { label: "Our Story", href: "/story" },
+                  { label: "Coffees", href: "/coffee" },
+                  { label: "Brew Guide", href: "/brew" },
+                  { label: "Visit Us", href: "/visit" },
+                ].map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="text-sm transition-opacity hover:opacity-100"
+                      style={{
+                        color: "rgba(255,255,255,0.55)",
+                        textDecoration: "none",
+                      }}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4
+                className="text-xs uppercase tracking-widest font-semibold mb-5"
+                style={{ color: "rgba(255,255,255,0.5)" }}
+              >
+                Visit
+              </h4>
+              <div className="space-y-3">
+                <p
+                  className="text-sm"
+                  style={{ color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}
+                >
+                  123 Old Town Dr<br />Scottsdale, AZ 85251
+                </p>
+                <p
+                  className="text-sm"
+                  style={{ color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}
+                >
+                  Mon–Fri: 6am – 4pm<br />Sat–Sun: 7am – 3pm
+                </p>
+              </div>
+            </div>
           </div>
           <div
-            style={{
-              fontFamily: "var(--font-body)",
-              fontSize: "0.8rem",
-              color: "rgba(250,246,241,0.35)",
-            }}
+            className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
           >
-            &copy; {new Date().getFullYear()} Sunrise Coffee Co. All rights reserved.
+            <p
+              className="text-xs"
+              style={{ color: "rgba(255,255,255,0.3)" }}
+            >
+              &copy; {new Date().getFullYear()} Sunrise Coffee Co. All rights reserved.
+            </p>
+            <div className="flex gap-6">
+              {["Privacy", "Terms"].map((item) => (
+                <a
+                  key={item}
+                  href="#"
+                  className="text-xs transition-opacity hover:opacity-70"
+                  style={{ color: "rgba(255,255,255,0.3)" }}
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </footer>

@@ -1,463 +1,644 @@
 "use client";
 
-import { useState } from "react";
 import FadeInUp from "@/components/fade-in-up";
 import ShineBorder from "@/components/shine-border";
 import { cn } from "@/lib/utils";
 
-const galleryImages = [
-  { url: "https://source.unsplash.com/600x800/?coffee-shop-interior-warm-wood-light-aesthetic-specialty", alt: "Warm interior with wooden tables and soft morning light", tall: true },
-  { url: "https://source.unsplash.com/600x600/?pour-over-coffee-brewing-close-up-hands-ritual", alt: "Pour-over brewing in action", tall: false },
-  { url: "https://source.unsplash.com/600x700/?coffee-cup-latte-art-top-down-minimalist-wooden-table", alt: "Latte art on wooden table", tall: false },
-  { url: "https://source.unsplash.com/600x900/?coffee-shop-interior-natural-light-seating", alt: "Sunlit seating area", tall: true },
-  { url: "https://source.unsplash.com/600x600/?specialty-coffee-bar-espresso-barista", alt: "Barista at work behind the bar", tall: false },
-  { url: "https://source.unsplash.com/600x750/?coffee-beans-detail-texture-roasted", alt: "Close-up of freshly roasted single-origin beans", tall: false },
-  { url: "https://source.unsplash.com/600x800/?coffee-shop-community-people-gather", alt: "Community gathering at the coffee shop", tall: true },
-  { url: "https://source.unsplash.com/600x600/?outdoor-patio-cafe-seating-desert", alt: "Outdoor seating in warm desert afternoon", tall: false },
-  { url: "https://source.unsplash.com/600x700/?chemex-v60-pour-over-ritual-detail", alt: "Chemex pour-over ritual detail shot", tall: false },
-  { url: "https://source.unsplash.com/600x800/?coffee-shop-window-light-minimalist", alt: "Window light casting warmth across the room", tall: true },
-  { url: "https://source.unsplash.com/600x600/?coffee-mug-hands-warmth-morning", alt: "Hands cradling a warm coffee mug", tall: false },
-  { url: "https://source.unsplash.com/600x650/?coffee-preparation-grinder-tools-craft", alt: "Craft tools of a specialty coffee bar", tall: false },
-];
-
-const faqs = [
-  {
-    question: "Do you have WiFi?",
-    answer: "Yes. We offer complimentary WiFi, but we encourage you to be present. Our space is designed for focus and conversation—we believe deep work doesn't require constant connection.",
-  },
-  {
-    question: "Can I work here for hours?",
-    answer: "Absolutely. We welcome laptop workers, students, and thinkers. We ask only that you be respectful of the shared space and purchase a beverage.",
-  },
-  {
-    question: "Do you offer milk-based drinks?",
-    answer: "We offer pour-overs as our specialty, but we can prepare milk beverages upon request. However, we believe single-origin coffee shines best black.",
-  },
-  {
-    question: "Can you accommodate groups or events?",
-    answer: "Yes. We can arrange private tastings and small group experiences. Please contact us to discuss.",
-  },
-  {
-    question: "Do you sell beans to take home?",
-    answer: "Yes. All our single-origins are available for purchase, whole bean or ground. We'll advise on storage and preparation.",
-  },
-  {
-    question: "What are your brewing methods?",
-    answer: "Our specialty is pour-over (V60, Chemex, Kalita Wave). We also offer espresso-based drinks and French press upon request.",
-  },
-  {
-    question: "Are your sourcing practices verified?",
-    answer: "Yes. We maintain direct relationships with our farms and can provide documentation of origin, pricing, and practices. Transparency is non-negotiable for us.",
-  },
-];
-
 export default function VisitPage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-
   return (
-    <>
+    <main className="bg-[var(--color-bg)] text-[var(--color-text)] overflow-x-hidden">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap');
-
-        .font-heading { font-family: 'Cormorant Garamond', Georgia, serif; }
-        .font-body { font-family: 'Source Sans 3', system-ui, sans-serif; }
-
-        .warm-filter {
-          filter: sepia(18%) saturate(1.15) brightness(1.03) contrast(0.97);
+        @keyframes borderPour {
+          from { height: 0%; }
+          to { height: 100%; }
         }
-
-        .gallery-img {
-          filter: sepia(12%) saturate(1.1) brightness(1.02) contrast(0.98);
-          transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.4s ease;
-        }
-        .gallery-img:hover {
-          transform: scale(1.03);
-          filter: sepia(5%) saturate(1.2) brightness(1.05) contrast(1.0);
-        }
-
-        @keyframes pour-drop {
-          0% { stroke-dashoffset: 200; opacity: 0; }
-          20% { opacity: 1; }
-          100% { stroke-dashoffset: 0; opacity: 0.7; }
-        }
-
-        @keyframes pour-fill {
-          0% { transform: scaleY(0); opacity: 0; }
-          60% { opacity: 1; }
-          100% { transform: scaleY(1); opacity: 0.9; }
-        }
-
-        .pour-stream {
-          stroke-dasharray: 200;
-          stroke-dashoffset: 200;
-          animation: pour-drop 2.4s ease-in-out infinite;
-        }
-
-        .pour-cup-fill {
-          transform-origin: bottom;
-          transform: scaleY(0);
-          animation: pour-fill 2.4s ease-in-out infinite;
-          animation-delay: 1.0s;
-        }
-
-        .faq-answer {
-          display: grid;
-          grid-template-rows: 0fr;
-          transition: grid-template-rows 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .faq-answer.open {
-          grid-template-rows: 1fr;
-        }
-        .faq-answer-inner {
+        .event-card {
+          position: relative;
           overflow: hidden;
         }
-
-        .location-card {
-          background: linear-gradient(135deg, rgba(251,246,240,1) 0%, rgba(245,237,228,1) 100%);
+        .event-card::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 3px;
+          height: 0%;
+          background: #C85A17;
+          transition: height 0.5s var(--ease-out, cubic-bezier(0.25, 0.46, 0.45, 0.94));
         }
-
-        .hero-grain {
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-          pointer-events: none;
+        .event-card:hover::before {
+          height: 100%;
+        }
+        .gallery-img {
+          transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .gallery-img:hover {
+          transform: scale(1.04);
+        }
+        .hours-row:last-child {
+          border-bottom: none;
         }
       `}</style>
 
-      <main className="font-body bg-[#faf6f1] text-[#2c1f14] min-h-screen">
-
-        {/* ─── HERO ─────────────────────────────────────────────── */}
-        <section
-          id="hero"
-          className="relative min-h-[70vh] md:min-h-[80vh] flex items-center justify-center overflow-hidden"
-        >
-          <img
-            src="https://source.unsplash.com/1600x900/?coffee-shop-interior-warm-wood-light-aesthetic-specialty"
-            alt="Sunrise Coffee Co. interior"
-            className="absolute inset-0 w-full h-full object-cover warm-filter"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1a0f08]/70 via-[#1a0f08]/45 to-[#faf6f1]" />
-          <div className="hero-grain absolute inset-0" />
-
-          <div className="relative z-10 text-center max-w-2xl mx-auto px-6 pt-24 pb-16">
-            <FadeInUp delay={0}>
-              <span
-                className="font-body text-xs tracking-[0.3em] uppercase text-[#c9a97a] mb-6 block"
-              >
-                Scottsdale, Arizona
-              </span>
-            </FadeInUp>
-            <FadeInUp delay={100}>
-              <h1
-                className="font-heading text-6xl md:text-8xl font-light text-white leading-[0.95] tracking-tight mb-6"
-              >
-                Visit Us
-              </h1>
-            </FadeInUp>
-            <FadeInUp delay={200}>
-              <p
-                className="font-body text-lg md:text-xl text-white/75 font-light leading-relaxed max-w-md mx-auto"
-              >
-                Step into a space designed for presence, craft, and coffee that matters.
-              </p>
-            </FadeInUp>
-
-            {/* Pour animation */}
-            <FadeInUp delay={350}>
-              <div className="flex justify-center mt-12 opacity-80">
-                <svg width="48" height="72" viewBox="0 0 48 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  {/* Kettle spout suggestion */}
-                  <path
-                    d="M24 4 C24 4, 24 8, 24 28"
-                    stroke="#c9a97a"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    className="pour-stream"
-                  />
-                  {/* Cup outline */}
-                  <path
-                    d="M10 36 L12 60 Q12 64 24 64 Q36 64 36 60 L38 36 Z"
-                    stroke="#c9a97a"
-                    strokeWidth="1.5"
-                    fill="none"
-                    strokeLinejoin="round"
-                  />
-                  {/* Cup fill */}
-                  <path
-                    d="M13 56 L14.5 59 Q14.5 62 24 62 Q33.5 62 33.5 59 L35 56 Z"
-                    fill="#c9a97a"
-                    className="pour-cup-fill"
-                  />
-                  {/* Handle */}
-                  <path
-                    d="M36 42 Q44 42 44 48 Q44 54 36 54"
-                    stroke="#c9a97a"
-                    strokeWidth="1.5"
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
-            </FadeInUp>
-          </div>
-
-          {/* Scroll indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
-            <span className="font-body text-[10px] tracking-[0.25em] uppercase text-[#2c1f14]">Explore</span>
-            <div className="w-px h-8 bg-[#2c1f14]/40" />
-          </div>
-        </section>
-
-        {/* ─── GALLERY ──────────────────────────────────────────── */}
-        <section id="gallery" className="py-24 md:py-32 px-4 md:px-8 bg-[#faf6f1]">
-          <div className="max-w-7xl mx-auto">
-            <FadeInUp delay={0}>
-              <div className="flex items-center gap-6 mb-16">
-                <div className="h-px flex-1 bg-[#2c1f14]/10" />
-                <span className="font-body text-[10px] tracking-[0.35em] uppercase text-[#9c7a5a]">The Space</span>
-                <div className="h-px flex-1 bg-[#2c1f14]/10" />
-              </div>
-            </FadeInUp>
-
-            {/* Masonry Grid */}
-            <div className="columns-1 sm:columns-2 lg:columns-3 gap-3 md:gap-4 space-y-3 md:space-y-4">
-              {galleryImages.map((img, i) => (
-                <FadeInUp key={i} delay={Math.min(i * 60, 300)}>
-                  <div className="break-inside-avoid rounded-lg md:rounded-xl overflow-hidden group">
-                    <img
-                      src={img.url}
-                      alt={img.alt}
-                      className="w-full object-cover gallery-img"
-                      style={{
-                        aspectRatio: img.tall ? "3/4" : "4/3",
-                      }}
-                    />
-                  </div>
-                </FadeInUp>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ─── DIVIDER ──────────────────────────────────────────── */}
-        <div className="px-8 md:px-16">
-          <div className="h-px bg-gradient-to-r from-transparent via-[#2c1f14]/15 to-transparent" />
-        </div>
-
-        {/* ─── LOCATION / MAP ───────────────────────────────────── */}
-        <section id="location" className="py-24 md:py-32 px-4 md:px-8 bg-[#faf6f1]">
-          <div className="max-w-6xl mx-auto">
-            <FadeInUp delay={0}>
-              <div className="text-center mb-16 md:mb-20">
-                <span className="font-body text-[10px] tracking-[0.35em] uppercase text-[#9c7a5a] mb-4 block">
-                  Where to Find Us
-                </span>
-                <h2 className="font-heading text-5xl md:text-6xl font-light text-[#2c1f14] leading-tight">
-                  Find Us in Scottsdale
-                </h2>
-              </div>
-            </FadeInUp>
-
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-10 items-stretch">
-              {/* Sidebar info */}
-              <FadeInUp delay={100} className="lg:col-span-2">
-                <div className="location-card rounded-2xl p-8 md:p-10 h-full flex flex-col justify-between border border-[#e0d2c0]">
-                  <div className="space-y-8">
-                    <div>
-                      <span className="font-body text-[10px] tracking-[0.3em] uppercase text-[#9c7a5a] mb-2 block">Address</span>
-                      <p className="font-heading text-2xl font-light text-[#2c1f14] leading-snug">
-                        Scottsdale, Arizona
-                      </p>
-                    </div>
-
-                    <div>
-                      <span className="font-body text-[10px] tracking-[0.3em] uppercase text-[#9c7a5a] mb-2 block">Hours</span>
-                      <div className="font-body text-[#5c3d2a] space-y-1 text-sm">
-                        <div className="flex justify-between">
-                          <span>Monday – Friday</span>
-                          <span className="text-[#2c1f14] font-medium">6am – 6pm</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Saturday</span>
-                          <span className="text-[#2c1f14] font-medium">7am – 5pm</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Sunday</span>
-                          <span className="text-[#2c1f14] font-medium">7am – 3pm</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <span className="font-body text-[10px] tracking-[0.3em] uppercase text-[#9c7a5a] mb-2 block">Contact</span>
-                      <p className="font-body text-sm text-[#5c3d2a]">[Contact information]</p>
-                    </div>
-
-                    <div>
-                      <span className="font-body text-[10px] tracking-[0.3em] uppercase text-[#9c7a5a] mb-2 block">Parking</span>
-                      <p className="font-body text-sm text-[#5c3d2a] leading-relaxed">
-                        Street parking and nearby lot available
-                      </p>
-                    </div>
-
-                    <div>
-                      <span className="font-body text-[10px] tracking-[0.3em] uppercase text-[#9c7a5a] mb-2 block">Nearby</span>
-                      <p className="font-body text-sm text-[#5c3d2a] leading-relaxed">
-                        Walking distance to galleries, shops, and downtown Scottsdale
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-10">
-                    <ShineBorder
-                      borderRadius={12}
-                      borderWidth={1}
-                      duration={6}
-                      color={["#c9a97a", "#e8d5b7", "#9c7a5a"]}
-                    >
-                      <a
-                        href="https://maps.google.com/?q=Scottsdale,Arizona"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-3 px-6 py-4 bg-[#2c1f14] text-[#faf6f1] rounded-xl font-body text-sm tracking-wide font-medium hover:bg-[#3d2b1a] transition-colors duration-300 w-full"
-                      >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                          <circle cx="12" cy="10" r="3" />
-                        </svg>
-                        Get Directions
-                      </a>
-                    </ShineBorder>
-                  </div>
-                </div>
-              </FadeInUp>
-
-              {/* Map */}
-              <FadeInUp delay={200} className="lg:col-span-3">
-                <div className="rounded-2xl overflow-hidden border border-[#e0d2c0] h-full min-h-[400px] md:min-h-[500px] relative">
-                  <iframe
-                    title="Sunrise Coffee Co. Location – Scottsdale, AZ"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d106433.5!2d-111.926!3d33.494!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x872b08f8ffffffff%3A0x0!2sScottsdale%2C%20AZ!5e0!3m2!1sen!2sus!4v1680000000000"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0, minHeight: "500px", filter: "sepia(20%) saturate(0.9) brightness(1.0) contrast(0.95)" }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="w-full h-full absolute inset-0"
-                  />
-                </div>
-              </FadeInUp>
-            </div>
-          </div>
-        </section>
-
-        {/* ─── ATMOSPHERE BAND ──────────────────────────────────── */}
-        <section
-          className="relative h-[50vh] md:h-[60vh] flex items-center justify-center overflow-hidden"
+      {/* ─────────────────────────────────────────
+          HERO — minimal-centered
+      ───────────────────────────────────────── */}
+      <section
+        id="hero"
+        className="relative min-h-[60vh] flex items-center justify-center overflow-hidden"
+        style={{ background: "linear-gradient(135deg, #F5EFE6 0%, #EDE0CE 50%, #E8D5B7 100%)" }}
+      >
+        {/* Subtle texture layer */}
+        <div
+          className="absolute inset-0 opacity-30"
           style={{
-            backgroundImage: `url(https://source.unsplash.com/1800x800/?coffee-shop-window-light-minimalist)`,
-            backgroundAttachment: "fixed",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundImage:
+              "radial-gradient(circle at 20% 80%, #C85A1720 0%, transparent 50%), radial-gradient(circle at 80% 20%, #8B6F4720 0%, transparent 50%)",
           }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1a0f08]/80 via-[#1a0f08]/55 to-[#1a0f08]/40" />
-          <div className="hero-grain absolute inset-0" />
-          <div className="relative text-center text-white px-6 max-w-xl">
-            <FadeInUp delay={0}>
-              <p className="font-heading text-3xl md:text-4xl font-light italic leading-relaxed text-white/90">
-                &ldquo;A place where time slows down, and coffee is never rushed.&rdquo;
-              </p>
-            </FadeInUp>
-          </div>
-        </section>
+        />
 
-        {/* ─── FAQ ──────────────────────────────────────────────── */}
-        <section id="faq" className="py-24 md:py-32 px-4 md:px-8 bg-[#faf6f1]">
-          <div className="max-w-3xl mx-auto">
-            <FadeInUp delay={0}>
-              <div className="text-center mb-16 md:mb-20">
-                <span className="font-body text-[10px] tracking-[0.35em] uppercase text-[#9c7a5a] mb-4 block">
-                  Good to Know
-                </span>
-                <h2 className="font-heading text-5xl md:text-6xl font-light text-[#2c1f14] leading-tight">
-                  Frequently Asked
-                  <span className="block font-heading italic font-light text-[#9c7a5a]">Questions</span>
-                </h2>
+        <div className="relative z-10 text-center max-w-2xl mx-auto px-6 py-24">
+          <FadeInUp delay={0}>
+            <span
+              className="inline-block text-xs font-semibold uppercase tracking-[0.25em] mb-6"
+              style={{ color: "#C85A17" }}
+            >
+              Scottsdale, Arizona
+            </span>
+          </FadeInUp>
+          <FadeInUp delay={100}>
+            <h1
+              className="text-5xl md:text-7xl font-bold mb-6 leading-[1.05] tracking-tight"
+              style={{ fontFamily: "var(--font-heading)", color: "#2C1810" }}
+            >
+              Visit Sunrise
+            </h1>
+          </FadeInUp>
+          <FadeInUp delay={200}>
+            <p
+              className="text-lg md:text-xl leading-relaxed max-w-md mx-auto"
+              style={{ color: "#6B4F3A", fontFamily: "var(--font-body)" }}
+            >
+              Join us in Scottsdale for your daily ritual.
+            </p>
+          </FadeInUp>
+          <FadeInUp delay={300}>
+            <div
+              className="mt-10 w-16 h-px mx-auto"
+              style={{ background: "#C85A17", opacity: 0.6 }}
+            />
+          </FadeInUp>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────
+          LOCATION MAP — map-focused
+      ───────────────────────────────────────── */}
+      <section
+        id="location"
+        className="py-24 px-6"
+        style={{ background: "#FAF6F0" }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <FadeInUp delay={0}>
+            <div className="text-center mb-14">
+              <span
+                className="text-xs font-semibold uppercase tracking-[0.25em] block mb-3"
+                style={{ color: "#C85A17" }}
+              >
+                Directions
+              </span>
+              <h2
+                className="text-4xl md:text-5xl font-bold"
+                style={{ fontFamily: "var(--font-heading)", color: "#2C1810" }}
+              >
+                Find Us
+              </h2>
+            </div>
+          </FadeInUp>
+
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+            {/* Map embed */}
+            <FadeInUp delay={100} className="lg:col-span-3">
+              <div className="rounded-2xl overflow-hidden shadow-lg" style={{ height: "420px" }}>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26784.872929547!2d-111.92608!3d33.4942!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x872b68b359baffff%3A0x9ffc3da2b4d6a5c2!2sScottsdale%2C%20AZ!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Sunrise Coffee Co location"
+                />
               </div>
             </FadeInUp>
 
-            <div className="space-y-0">
-              {faqs.map((faq, i) => (
-                <FadeInUp key={i} delay={Math.min(i * 60, 240)}>
-                  <div
-                    className={cn(
-                      "border-b border-[#2c1f14]/10 last:border-b-0",
-                      i === 0 && "border-t border-[#2c1f14]/10"
-                    )}
+            {/* Info card */}
+            <FadeInUp delay={200} className="lg:col-span-2">
+              <div
+                className="rounded-2xl p-8 h-full"
+                style={{
+                  background: "#FFFFFF",
+                  border: "1px solid #E8D5B7",
+                  boxShadow: "0 4px 24px rgba(139,111,71,0.08)",
+                }}
+              >
+                {/* Address */}
+                <div className="mb-7">
+                  <span
+                    className="text-xs font-semibold uppercase tracking-[0.2em] block mb-2"
+                    style={{ color: "#C85A17" }}
                   >
-                    <button
-                      onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                      className="w-full text-left flex items-center justify-between py-6 md:py-7 gap-6 group"
-                      aria-expanded={openFaq === i}
+                    Address
+                  </span>
+                  <p className="font-semibold text-lg" style={{ color: "#2C1810" }}>
+                    Sunrise Coffee Co
+                  </p>
+                  <p className="text-base" style={{ color: "#6B4F3A" }}>
+                    Scottsdale, AZ
+                  </p>
+                </div>
+
+                {/* Phone */}
+                <div className="mb-7">
+                  <span
+                    className="text-xs font-semibold uppercase tracking-[0.2em] block mb-2"
+                    style={{ color: "#C85A17" }}
+                  >
+                    Phone
+                  </span>
+                  <p className="text-base" style={{ color: "#6B4F3A" }}>
+                    Contact for details
+                  </p>
+                </div>
+
+                {/* Hours */}
+                <div className="mb-7">
+                  <span
+                    className="text-xs font-semibold uppercase tracking-[0.2em] block mb-3"
+                    style={{ color: "#C85A17" }}
+                  >
+                    Hours
+                  </span>
+                  <div className="space-y-0">
+                    {[
+                      { day: "Monday", hours: "6:30 AM – 5:00 PM" },
+                      { day: "Tuesday", hours: "6:30 AM – 5:00 PM" },
+                      { day: "Wednesday", hours: "6:30 AM – 5:00 PM" },
+                      { day: "Thursday", hours: "6:30 AM – 5:00 PM" },
+                      { day: "Friday", hours: "6:30 AM – 6:00 PM" },
+                      { day: "Saturday", hours: "7:00 AM – 6:00 PM" },
+                      { day: "Sunday", hours: "7:00 AM – 4:00 PM" },
+                    ].map(({ day, hours }) => (
+                      <div
+                        key={day}
+                        className="hours-row flex justify-between items-center py-2"
+                        style={{ borderBottom: "1px solid #F0E4D0" }}
+                      >
+                        <span className="text-sm font-medium" style={{ color: "#2C1810" }}>
+                          {day}
+                        </span>
+                        <span className="text-sm" style={{ color: "#6B4F3A" }}>
+                          {hours}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Parking & Accessibility */}
+                <div className="space-y-4">
+                  <div>
+                    <span
+                      className="text-xs font-semibold uppercase tracking-[0.2em] block mb-1"
+                      style={{ color: "#C85A17" }}
                     >
+                      Parking
+                    </span>
+                    <p className="text-sm" style={{ color: "#6B4F3A" }}>
+                      Ample street parking and lot parking available
+                    </p>
+                  </div>
+                  <div>
+                    <span
+                      className="text-xs font-semibold uppercase tracking-[0.2em] block mb-1"
+                      style={{ color: "#C85A17" }}
+                    >
+                      Accessibility
+                    </span>
+                    <p className="text-sm" style={{ color: "#6B4F3A" }}>
+                      Fully accessible. Restroom available for customers.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </FadeInUp>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────
+          ATMOSPHERE — full-bleed gallery
+      ───────────────────────────────────────── */}
+      <section
+        id="atmosphere"
+        className="py-20 px-6"
+        style={{ background: "#2C1810" }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <FadeInUp delay={0}>
+            <div className="text-center mb-14">
+              <span
+                className="text-xs font-semibold uppercase tracking-[0.25em] block mb-3"
+                style={{ color: "#C85A17" }}
+              >
+                Our Environment
+              </span>
+              <h2
+                className="text-4xl md:text-5xl font-bold"
+                style={{ fontFamily: "var(--font-heading)", color: "#F5EFE6" }}
+              >
+                The Space
+              </h2>
+            </div>
+          </FadeInUp>
+
+          {/* Gallery grid: hero image + 3 smaller */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+            {/* Large featured image */}
+            <FadeInUp delay={100} className="md:col-span-7 row-span-2">
+              <div
+                className="rounded-2xl overflow-hidden"
+                style={{ height: "520px" }}
+              >
+                <img
+                  src="https://source.unsplash.com/900x700/?specialty+coffee+shop+interior+warm+wooden+tables+natural+light"
+                  alt="Sunrise Coffee Co interior — warm wooden tables and natural light"
+                  className="gallery-img w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            </FadeInUp>
+
+            {/* Top-right image */}
+            <FadeInUp delay={150} className="md:col-span-5">
+              <div
+                className="rounded-2xl overflow-hidden"
+                style={{ height: "248px" }}
+              >
+                <img
+                  src="https://source.unsplash.com/700x400/?pour+over+coffee+brewing+close+up+steam+morning+light"
+                  alt="Pour-over brewing station with morning steam"
+                  className="gallery-img w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            </FadeInUp>
+
+            {/* Bottom-right image */}
+            <FadeInUp delay={200} className="md:col-span-5">
+              <div
+                className="rounded-2xl overflow-hidden"
+                style={{ height: "248px" }}
+              >
+                <img
+                  src="https://source.unsplash.com/700x400/?modern+minimalist+coffee+shop+community+seating+area+warm+earth+tones"
+                  alt="Community seating area with warm earth tones"
+                  className="gallery-img w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            </FadeInUp>
+
+            {/* Full-width bottom strip */}
+            <FadeInUp delay={250} className="md:col-span-12">
+              <div className="rounded-2xl overflow-hidden relative" style={{ height: "220px" }}>
+                <img
+                  src="https://source.unsplash.com/1600x400/?barista+pouring+coffee+pour+over+cone+ceramic"
+                  alt="Barista carefully pouring a pour-over"
+                  className="gallery-img w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div
+                  className="absolute inset-0 flex items-center justify-center"
+                  style={{
+                    background:
+                      "linear-gradient(to right, rgba(44,24,16,0.6) 0%, rgba(44,24,16,0.1) 50%, rgba(44,24,16,0.6) 100%)",
+                  }}
+                >
+                  <p
+                    className="text-center text-lg md:text-xl font-light tracking-wide"
+                    style={{ color: "rgba(245,239,230,0.9)", fontFamily: "var(--font-heading)" }}
+                  >
+                    Crafted with intention. Every cup, every visit.
+                  </p>
+                </div>
+              </div>
+            </FadeInUp>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────
+          BOOKING CTA — prominent-card
+      ───────────────────────────────────────── */}
+      <section
+        id="booking"
+        className="py-24 px-6"
+        style={{
+          background:
+            "linear-gradient(135deg, #3D2314 0%, #5C3420 40%, #7A4A30 100%)",
+        }}
+      >
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <FadeInUp delay={0}>
+                <span
+                  className="text-xs font-semibold uppercase tracking-[0.25em] block mb-4"
+                  style={{ color: "#E8B88A" }}
+                >
+                  Gatherings & Events
+                </span>
+                <h2
+                  className="text-4xl md:text-5xl font-bold mb-6 leading-tight"
+                  style={{
+                    fontFamily: "var(--font-heading)",
+                    color: "#F5EFE6",
+                  }}
+                >
+                  Group Visits &amp; Special Orders
+                </h2>
+              </FadeInUp>
+              <FadeInUp delay={100}>
+                <p
+                  className="text-base md:text-lg leading-relaxed"
+                  style={{ color: "rgba(245,239,230,0.75)", fontFamily: "var(--font-body)" }}
+                >
+                  Planning a group outing? Want to reserve seating for a gathering? We&rsquo;d love to host you. Contact us to arrange group visits, private cuppings, or special pour-over sessions. For inquiries and reservations, reach out via email or phone during business hours.
+                </p>
+              </FadeInUp>
+            </div>
+
+            <FadeInUp delay={200}>
+              <ShineBorder
+                borderRadius={20}
+                borderWidth={1.5}
+                duration={8}
+                color={["#C85A17", "#E8B88A", "#F5EFE6"]}
+              >
+                <div
+                  className="rounded-2xl p-8 md:p-10"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    backdropFilter: "blur(12px)",
+                  }}
+                >
+                  <div className="space-y-6">
+                    <div>
                       <span
-                        className={cn(
-                          "font-heading text-xl md:text-2xl font-light leading-snug transition-colors duration-300",
-                          openFaq === i ? "text-[#9c7a5a]" : "text-[#2c1f14] group-hover:text-[#7a5c3a]"
-                        )}
+                        className="text-xs font-semibold uppercase tracking-[0.2em] block mb-2"
+                        style={{ color: "#E8B88A" }}
                       >
-                        {faq.question}
+                        Reach Out
                       </span>
-                      <span
-                        className={cn(
-                          "flex-none w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-400",
-                          openFaq === i
-                            ? "border-[#9c7a5a] bg-[#9c7a5a] text-white rotate-45"
-                            : "border-[#2c1f14]/20 text-[#2c1f14]/50 group-hover:border-[#9c7a5a] group-hover:text-[#9c7a5a]"
-                        )}
-                        style={{ transition: "transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), background-color 0.3s, border-color 0.3s, color 0.3s" }}
+                      <p
+                        className="text-base"
+                        style={{ color: "rgba(245,239,230,0.85)" }}
                       >
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                          <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                        </svg>
-                      </span>
-                    </button>
+                        Email or call us during business hours to discuss your group visit or special request.
+                      </p>
+                    </div>
 
                     <div
-                      className={cn("faq-answer", openFaq === i && "open")}
-                      role="region"
-                    >
-                      <div className="faq-answer-inner">
-                        <div className="pb-7 pr-14">
-                          <p className="font-body text-base text-[#5c3d2a] leading-relaxed">
-                            {faq.answer}
-                          </p>
-                        </div>
+                      className="w-full h-px"
+                      style={{ background: "rgba(232,184,138,0.25)" }}
+                    />
+
+                    <div>
+                      <span
+                        className="text-xs font-semibold uppercase tracking-[0.2em] block mb-2"
+                        style={{ color: "#E8B88A" }}
+                      >
+                        Hours Reminder
+                      </span>
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                        <span className="text-sm" style={{ color: "rgba(245,239,230,0.7)" }}>Mon–Thu</span>
+                        <span className="text-sm" style={{ color: "rgba(245,239,230,0.9)" }}>6:30 AM – 5:00 PM</span>
+                        <span className="text-sm" style={{ color: "rgba(245,239,230,0.7)" }}>Friday</span>
+                        <span className="text-sm" style={{ color: "rgba(245,239,230,0.9)" }}>6:30 AM – 6:00 PM</span>
+                        <span className="text-sm" style={{ color: "rgba(245,239,230,0.7)" }}>Saturday</span>
+                        <span className="text-sm" style={{ color: "rgba(245,239,230,0.9)" }}>7:00 AM – 6:00 PM</span>
+                        <span className="text-sm" style={{ color: "rgba(245,239,230,0.7)" }}>Sunday</span>
+                        <span className="text-sm" style={{ color: "rgba(245,239,230,0.9)" }}>7:00 AM – 4:00 PM</span>
                       </div>
                     </div>
-                  </div>
-                </FadeInUp>
-              ))}
-            </div>
 
-            {/* Closing note */}
-            <FadeInUp delay={200}>
-              <div className="mt-16 pt-10 border-t border-[#2c1f14]/10 text-center">
-                <p className="font-body text-sm text-[#9c7a5a] leading-relaxed">
-                  Still have questions? We're here.
-                </p>
-                <a
-                  href="/contact"
-                  className="inline-block mt-4 font-body text-sm font-medium text-[#2c1f14] border-b border-[#2c1f14]/40 hover:border-[#9c7a5a] hover:text-[#9c7a5a] transition-colors duration-300 pb-px tracking-wide"
-                >
-                  Get in touch
-                </a>
-              </div>
+                    <div
+                      className="w-full h-px"
+                      style={{ background: "rgba(232,184,138,0.25)" }}
+                    />
+
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <a
+                        href="mailto:hello@sunrisecoffeeco.com"
+                        className="flex-1 text-center px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200"
+                        style={{
+                          background: "#C85A17",
+                          color: "#F5EFE6",
+                        }}
+                        onMouseEnter={(e) => {
+                          (e.currentTarget as HTMLElement).style.background = "#A84810";
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.currentTarget as HTMLElement).style.background = "#C85A17";
+                        }}
+                      >
+                        Email Us
+                      </a>
+                      <a
+                        href="tel:+1"
+                        className="flex-1 text-center px-6 py-3 rounded-xl text-sm font-semibold border transition-all duration-200"
+                        style={{
+                          borderColor: "rgba(232,184,138,0.5)",
+                          color: "#E8B88A",
+                          background: "transparent",
+                        }}
+                        onMouseEnter={(e) => {
+                          (e.currentTarget as HTMLElement).style.background = "rgba(232,184,138,0.1)";
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.currentTarget as HTMLElement).style.background = "transparent";
+                        }}
+                      >
+                        Call Us
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </ShineBorder>
             </FadeInUp>
           </div>
-        </section>
+        </div>
+      </section>
 
-      </main>
-    </>
+      {/* ─────────────────────────────────────────
+          EVENT LISTING — minimal-list
+      ───────────────────────────────────────── */}
+      <section
+        id="events"
+        className="py-24 px-6"
+        style={{ background: "#FAF6F0" }}
+      >
+        <div className="max-w-4xl mx-auto">
+          <FadeInUp delay={0}>
+            <div className="mb-14">
+              <span
+                className="text-xs font-semibold uppercase tracking-[0.25em] block mb-3"
+                style={{ color: "#C85A17" }}
+              >
+                Community
+              </span>
+              <h2
+                className="text-4xl md:text-5xl font-bold"
+                style={{ fontFamily: "var(--font-heading)", color: "#2C1810" }}
+              >
+                Upcoming Events
+              </h2>
+            </div>
+          </FadeInUp>
+
+          <div className="space-y-1">
+            {[
+              {
+                date: "Monthly",
+                title: "Origin Talk & Cupping",
+                description:
+                  "Join us for an in-depth conversation about a featured origin. We'll taste the coffee, discuss farm practices, and answer all your questions. No experience necessary—just curiosity.",
+              },
+              {
+                date: "First Saturday",
+                title: "Coffee Lab: Brewing Methods",
+                description:
+                  "Learn different pour-over techniques. We'll compare brewing variables and taste how they change the cup. Hands-on and educational.",
+              },
+              {
+                date: "Check back soon",
+                title: "Special Events Coming",
+                description:
+                  "We're planning farm visits, roasting workshops, and origin-focused dinners. Subscribe to stay updated on upcoming announcements.",
+              },
+            ].map((event, i) => (
+              <FadeInUp key={event.title} delay={i * 100}>
+                <div
+                  className="event-card group flex gap-6 md:gap-10 py-8 pl-6 pr-4 rounded-xl transition-all duration-300"
+                  style={{
+                    borderBottom: "1px solid #E8D5B7",
+                    background: "transparent",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = "#FFFFFF";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 20px rgba(139,111,71,0.08)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = "transparent";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "none";
+                  }}
+                >
+                  {/* Date badge */}
+                  <div className="flex-none pt-1">
+                    <div
+                      className="inline-block px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider whitespace-nowrap"
+                      style={{
+                        background: "#F5EFE6",
+                        color: "#C85A17",
+                        border: "1px solid #E8D5B7",
+                      }}
+                    >
+                      {event.date}
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <h3
+                      className="text-xl md:text-2xl font-bold mb-2 leading-snug"
+                      style={{ fontFamily: "var(--font-heading)", color: "#2C1810" }}
+                    >
+                      {event.title}
+                    </h3>
+                    <p
+                      className="text-sm md:text-base leading-relaxed"
+                      style={{ color: "#6B4F3A" }}
+                    >
+                      {event.description}
+                    </p>
+                  </div>
+
+                  {/* Hover arrow */}
+                  <div
+                    className="flex-none self-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ color: "#C85A17" }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path
+                        d="M4 10h12M11 5l5 5-5 5"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </FadeInUp>
+            ))}
+          </div>
+
+          {/* Subscribe CTA */}
+          <FadeInUp delay={300}>
+            <div className="mt-14 pt-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              <div>
+                <p
+                  className="text-base font-medium"
+                  style={{ color: "#2C1810" }}
+                >
+                  Stay in the loop on cuppings, origin talks, and more.
+                </p>
+                <p className="text-sm mt-1" style={{ color: "#6B4F3A" }}>
+                  Check back soon for upcoming announcements.
+                </p>
+              </div>
+              <a
+                href="mailto:hello@sunrisecoffeeco.com?subject=Subscribe to Events"
+                className="flex-none inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200"
+                style={{
+                  background: "#2C1810",
+                  color: "#F5EFE6",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "#C85A17";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "#2C1810";
+                }}
+              >
+                Subscribe for Updates
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M3 8h10M9 4l4 4-4 4"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+            </div>
+          </FadeInUp>
+        </div>
+      </section>
+    </main>
   );
 }
