@@ -2,358 +2,386 @@
 
 import FadeInUp from "@/components/fade-in-up";
 import ShineBorder from "@/components/shine-border";
+import { cn } from "@/lib/utils";
 
 export default function AboutPage() {
   return (
-    <main className="bg-[var(--color-bg)] text-[var(--color-text)]" style={{ fontFamily: "var(--font-body)" }}>
+    <main className="bg-[var(--color-bg)] text-[var(--color-text)]">
       <style>{`
-        .gradient-heading {
-          background: linear-gradient(90deg, #D4A574, #C85A17);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-        .gradient-underline {
+        .story-image {
           position: relative;
-          display: inline-block;
+          overflow: hidden;
         }
-        .gradient-underline::after {
+        .story-image img {
+          transition: transform 0.8s var(--ease-out, ease-out);
+        }
+        .story-image:hover img {
+          transform: scale(1.03);
+        }
+        .value-item {
+          border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+          transition: border-color var(--duration-normal, 300ms) var(--ease-out, ease-out);
+        }
+        .value-item:last-child {
+          border-bottom: none;
+        }
+        .value-item:hover {
+          border-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+        }
+        .stat-item {
+          position: relative;
+        }
+        .stat-item::after {
           content: '';
           position: absolute;
-          left: 0;
-          bottom: -6px;
-          width: 100%;
-          height: 3px;
-          background: linear-gradient(90deg, #D4A574, #C85A17);
-          border-radius: 2px;
+          right: 0;
+          top: 20%;
+          height: 60%;
+          width: 1px;
+          background: color-mix(in srgb, var(--color-text) 12%, transparent);
         }
-        .team-card {
-          position: relative;
-          transform-style: preserve-3d;
-          transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+        .stat-item:last-child::after {
+          display: none;
         }
-        .team-card:hover {
-          transform: translateY(-6px);
-        }
-        .stat-number {
-          font-family: var(--font-heading);
-          background: linear-gradient(135deg, #D4A574, #C85A17);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-        .narrative-section {
-          background-attachment: fixed;
-          background-size: cover;
-          background-position: center;
-        }
-        @media (max-width: 768px) {
-          .narrative-section {
-            background-attachment: scroll;
+        @media (max-width: 767px) {
+          .stat-item::after {
+            display: none;
           }
         }
-        .story-divider {
-          width: 60px;
-          height: 3px;
-          background: linear-gradient(90deg, #D4A574, #C85A17);
-          border-radius: 2px;
-          margin: 0 auto;
-        }
-        .team-photo-ring {
-          background: linear-gradient(135deg, #D4A574, #C85A17);
-          padding: 3px;
-          border-radius: 9999px;
-        }
-        .role-badge {
-          background: linear-gradient(90deg, rgba(212,165,116,0.15), rgba(200,90,23,0.12));
-          border: 1px solid rgba(212,165,116,0.3);
+        .about-page-header {
+          background-image: url('https://source.unsplash.com/1600x600/?coffee+farm+landscape+mountains+origin');
+          background-size: cover;
+          background-position: center;
+          background-attachment: fixed;
         }
       `}</style>
 
-      {/* ─── STORY SECTION ─── */}
-      <section
-        id="story"
-        className="narrative-section relative"
-        style={{
-          backgroundImage: `url(https://source.unsplash.com/1800x1000/?single+origin+coffee+pour+over+close+up+golden+light)`,
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/65 to-black/80" />
-        <div className="relative z-10 max-w-4xl mx-auto px-6 py-32 md:py-48 text-center text-white">
+      {/* Page Header — atmospheric intro */}
+      <section className="about-page-header relative h-[38vh] min-h-[260px] flex items-end justify-start overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/75" />
+        <div className="relative z-10 max-w-6xl mx-auto w-full px-6 md:px-12 pb-10 md:pb-14">
           <FadeInUp delay={0}>
             <span
-              className="inline-block text-xs font-semibold uppercase tracking-[0.25em] mb-6"
-              style={{ color: "#D4A574" }}
+              className="block text-xs font-semibold uppercase tracking-[0.25em] mb-3"
+              style={{ color: "var(--color-accent, #c9a96e)", fontFamily: "var(--font-body)" }}
             >
-              Our Story
+              Sunrise Coffee Co
             </span>
           </FadeInUp>
-
           <FadeInUp delay={100}>
             <h1
-              className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight"
+              className="text-4xl md:text-6xl font-bold text-white leading-tight"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              Founded on a belief that coffee
-              <br />
-              <span className="gradient-heading">deserves intention</span>
+              About Us
             </h1>
-          </FadeInUp>
-
-          <FadeInUp delay={200}>
-            <div className="story-divider mb-10" />
-          </FadeInUp>
-
-          <FadeInUp delay={200}>
-            <div className="space-y-6 text-white/80 text-lg md:text-xl leading-relaxed max-w-3xl mx-auto text-left md:text-center">
-              <p>
-                Sunrise Coffee Co was born from a simple observation: most coffee shops treat beans as a commodity, not a craft. In 2015, our founder began traveling to coffee-producing regions—walking farms in Ethiopia, sitting with farmers in Colombia, learning about fermentation in Costa Rica.
-              </p>
-              <p className="text-white/65">
-                What struck them most was the care, the generations of knowledge, the pride in each harvest. Yet on shelves back home, all that work was reduced to &ldquo;dark roast&rdquo; or &ldquo;breakfast blend.&rdquo;
-              </p>
-              <p>
-                We opened Sunrise Coffee Co in Scottsdale with one mission: honor the origin. Single-origin pour-overs became our medium because they demand precision, they reveal character, and they force us to know our beans intimately.
-              </p>
-              <p
-                className="text-white font-medium text-xl md:text-2xl leading-relaxed"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                Today, every cup we pour is a conversation between the farm and you—transparent, intentional, and undeniably delicious.
-              </p>
-            </div>
           </FadeInUp>
         </div>
       </section>
 
-      {/* ─── ATMOSPHERIC BREAK ─── */}
-      <section className="relative h-[35vh] overflow-hidden">
+      {/* ─── STORY SECTION ─── */}
+      <section
+        id="story"
+        className="py-24 md:py-32 px-6 md:px-12"
+        style={{ background: "var(--color-bg)" }}
+      >
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          {/* Left — narrative text */}
+          <div className="order-2 lg:order-1">
+            <FadeInUp delay={0}>
+              <span
+                className="block text-xs font-semibold uppercase tracking-[0.22em] mb-5"
+                style={{
+                  color: "var(--color-accent, #c9a96e)",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                Our Story
+              </span>
+            </FadeInUp>
+            <FadeInUp delay={100}>
+              <h2
+                className="text-3xl md:text-5xl font-bold leading-tight mb-6"
+                style={{
+                  fontFamily: "var(--font-heading)",
+                  color: "var(--color-text)",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Founded on the belief that coffee deserves attention
+              </h2>
+            </FadeInUp>
+            <FadeInUp delay={150}>
+              <div
+                className="space-y-5 text-base md:text-lg leading-relaxed"
+                style={{
+                  color: "var(--color-muted)",
+                  fontFamily: "var(--font-body)",
+                  lineHeight: "1.85",
+                }}
+              >
+                <p>
+                  Sunrise Coffee Co was born from a simple obsession: understanding coffee at its source. After traveling through coffee-producing regions in East Africa and Central America, we realized that most coffee drinkers never learn the story behind their cup. We opened Sunrise to change that.
+                </p>
+                <p>
+                  We source directly from farmers and cooperatives we trust, prioritizing quality, sustainability, and fair compensation. Every coffee we serve is single-origin, roasted in small batches, and prepared with precision. We believe your morning ritual deserves respect—and your coffee deserves to tell a story worth knowing.
+                </p>
+              </div>
+            </FadeInUp>
+            <FadeInUp delay={200}>
+              <div
+                className="mt-10 pt-8 border-t"
+                style={{
+                  borderColor:
+                    "color-mix(in srgb, var(--color-text) 10%, transparent)",
+                }}
+              >
+                <p
+                  className="text-sm uppercase tracking-widest font-semibold"
+                  style={{
+                    color: "var(--color-accent, #c9a96e)",
+                    fontFamily: "var(--font-body)",
+                  }}
+                >
+                  Every cup tells a story worth knowing.
+                </p>
+              </div>
+            </FadeInUp>
+          </div>
+
+          {/* Right — image */}
+          <div className="order-1 lg:order-2">
+            <FadeInUp delay={80}>
+              <div className="story-image rounded-2xl overflow-hidden shadow-2xl" style={{ boxShadow: "0 32px 80px -12px rgba(0,0,0,0.22)" }}>
+                <img
+                  src="https://source.unsplash.com/900x1100/?pour+over+coffee+brewing+process+detail+hands"
+                  alt="Founder or café workspace — warm and authentic"
+                  className="w-full h-[420px] md:h-[560px] object-cover"
+                />
+              </div>
+            </FadeInUp>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FEATURE HIGHLIGHT — How We Work ─── */}
+      <section
+        id="how-we-work"
+        className="py-24 md:py-32 px-6 md:px-12"
+        style={{ background: "var(--color-surface, #f8f4ef)" }}
+      >
+        <div className="max-w-5xl mx-auto">
+          <FadeInUp delay={0}>
+            <div className="mb-16 md:mb-20">
+              <span
+                className="block text-xs font-semibold uppercase tracking-[0.22em] mb-5"
+                style={{
+                  color: "var(--color-accent, #c9a96e)",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                How We Work
+              </span>
+              <h2
+                className="text-3xl md:text-5xl font-bold leading-tight max-w-xl"
+                style={{
+                  fontFamily: "var(--font-heading)",
+                  color: "var(--color-text)",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Principles we carry from farm to cup
+              </h2>
+            </div>
+          </FadeInUp>
+
+          <div className="space-y-0">
+            {[
+              {
+                title: "Direct Partnerships",
+                description:
+                  "We build lasting relationships with farmers and cooperatives, visiting origins regularly to ensure quality and fair practice.",
+                index: "01",
+              },
+              {
+                title: "Sustainability First",
+                description:
+                  "We prioritize shade-grown, water-conscious farming and regenerative practices that protect land and community.",
+                index: "02",
+              },
+              {
+                title: "Transparent Sourcing",
+                description:
+                  "Every origin has a story. We share prices, farmer names, altitude, and processing details—because you deserve to know.",
+                index: "03",
+              },
+              {
+                title: "Educational Mission",
+                description:
+                  "We teach. Whether through conversation, tastings, or future workshops, we're committed to deepening coffee literacy.",
+                index: "04",
+              },
+            ].map((item, i) => (
+              <FadeInUp key={item.title} delay={i * 100}>
+                <div
+                  className="value-item grid grid-cols-1 md:grid-cols-[80px_1fr_2fr] gap-4 md:gap-12 items-start py-9 md:py-10"
+                >
+                  {/* Number */}
+                  <span
+                    className="text-xs font-semibold tracking-widest hidden md:block pt-1"
+                    style={{
+                      color: "var(--color-accent, #c9a96e)",
+                      fontFamily: "var(--font-body)",
+                    }}
+                  >
+                    {item.index}
+                  </span>
+                  {/* Title */}
+                  <h3
+                    className="text-xl md:text-2xl font-semibold leading-snug"
+                    style={{
+                      fontFamily: "var(--font-heading)",
+                      color: "var(--color-text)",
+                    }}
+                  >
+                    {item.title}
+                  </h3>
+                  {/* Description */}
+                  <p
+                    className="text-base md:text-lg leading-relaxed"
+                    style={{
+                      color: "var(--color-muted)",
+                      fontFamily: "var(--font-body)",
+                      lineHeight: "1.8",
+                    }}
+                  >
+                    {item.description}
+                  </p>
+                </div>
+              </FadeInUp>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── ATMOSPHERIC BREAK — full-bleed image ─── */}
+      <section
+        className="relative h-[40vh] min-h-[240px] flex items-center justify-center overflow-hidden"
+        aria-hidden="true"
+      >
         <img
-          src="https://source.unsplash.com/1600x600/?coffee+farm+highlands+morning+mist+origin"
-          alt="Coffee farm highlands"
+          src="https://source.unsplash.com/1600x500/?cozy+coffee+shop+interior+natural+light"
+          alt=""
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ transform: "scale(1.05)", transition: "transform 0.8s ease-out" }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-black/60" />
-        <div className="relative z-10 flex items-center justify-center h-full px-6 text-center text-white">
-          <FadeInUp delay={0}>
-            <p
-              className="text-xl md:text-2xl font-light italic text-white/90 max-w-2xl"
-              style={{ fontFamily: "var(--font-heading)" }}
-            >
-              &ldquo;Every cup is a conversation between the farm and you.&rdquo;
-            </p>
-          </FadeInUp>
+        <div className="relative z-10 text-center px-6">
+          <p
+            className="text-white/90 text-xl md:text-3xl font-light max-w-2xl mx-auto"
+            style={{
+              fontFamily: "var(--font-heading)",
+              lineHeight: "1.6",
+              letterSpacing: "0.01em",
+            }}
+          >
+            &ldquo;Your morning ritual deserves respect.&rdquo;
+          </p>
         </div>
       </section>
 
       {/* ─── STATS BAR ─── */}
       <section
-        id="stats"
-        className="py-20 md:py-24 px-6"
-        style={{ backgroundColor: "var(--color-surface)" }}
+        id="by-the-numbers"
+        className="py-20 md:py-24 px-6 md:px-12"
+        style={{ background: "var(--color-bg)" }}
       >
         <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-4">
-            {[
-              { number: "9+", label: "Years of Single-Origin Specialization" },
-              { number: "27", label: "Coffee Origins Sourced & Featured" },
-              { number: "500+", label: "Cups Poured Daily" },
-              { number: "100%", label: "Direct Trade or Fair Trade Sourced" },
-            ].map((stat, i) => (
-              <FadeInUp key={stat.label} delay={i * 100}>
-                <div
-                  className="text-center px-4 py-6 relative"
-                  style={{
-                    borderRight:
-                      i < 3
-                        ? "1px solid rgba(212,165,116,0.2)"
-                        : "none",
-                  }}
-                >
-                  <div
-                    className="stat-number text-5xl md:text-6xl font-black mb-3 leading-none"
-                    style={{ fontFamily: "var(--font-heading)" }}
-                  >
-                    {stat.number}
-                  </div>
-                  <div
-                    className="text-xs md:text-sm font-medium uppercase tracking-widest leading-relaxed"
-                    style={{ color: "var(--color-muted)" }}
-                  >
-                    {stat.label}
-                  </div>
-                </div>
-              </FadeInUp>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── TEAM PROFILES ─── */}
-      <section
-        id="team"
-        className="py-24 md:py-32 px-6"
-        style={{ backgroundColor: "var(--color-bg)" }}
-      >
-        <div className="max-w-6xl mx-auto">
-          {/* Section Header */}
-          <div className="text-center mb-16 md:mb-20">
-            <FadeInUp delay={0}>
-              <span
-                className="inline-block text-xs font-semibold uppercase tracking-[0.25em] mb-4"
-                style={{ color: "#C85A17" }}
-              >
-                The People Behind the Cup
-              </span>
-            </FadeInUp>
-            <FadeInUp delay={100}>
-              <h2
-                className="text-4xl md:text-5xl font-bold mb-4"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                <span className="gradient-underline">Meet the Team</span>
-              </h2>
-            </FadeInUp>
-            <FadeInUp delay={200}>
-              <p
-                className="text-base md:text-lg max-w-xl mx-auto mt-6"
-                style={{ color: "var(--color-muted)", lineHeight: 1.8 }}
-              >
-                Each person on our team arrived here through their own journey with coffee. What unites us is a shared obsession with craft, transparency, and the connection between grower and guest.
-              </p>
-            </FadeInUp>
-          </div>
-
-          {/* Team Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
-            {[
-              {
-                name: "Founder & Head Sourcer",
-                role: "Founder",
-                bio: "Coffee farmer at heart. Has personally visited farms across East Africa, Central America, and Southeast Asia. Believes every cup tells a story—we just have to listen.",
-                image: "https://source.unsplash.com/400x500/?artisan+coffee+man+portrait+warm",
-                icon: "☕",
-              },
-              {
-                name: "Head Barista",
-                role: "Head Barista & Training Lead",
-                bio: "Specialty Coffee Association certified. Obsessed with precision, technique, and the moment a customer's face changes when they taste an origin for the first time.",
-                image: "https://source.unsplash.com/400x500/?barista+woman+portrait+coffee",
-                icon: "⚗️",
-              },
-              {
-                name: "Roastmaster",
-                role: "Roasting & Quality",
-                bio: "Former aerospace engineer. Now applies that same obsession with detail to roasting profiles. Every batch is tested, tasted, and perfected.",
-                image: "https://source.unsplash.com/400x500/?coffee+roaster+man+portrait",
-                icon: "🔥",
-              },
-              {
-                name: "Community Manager",
-                role: "Education & Tastings",
-                bio: "Passionate about teaching. Leads our monthly origin tastings and loves connecting customers with the farmers behind their cup.",
-                image: "https://source.unsplash.com/400x500/?woman+coffee+educator+portrait",
-                icon: "🌍",
-              },
-            ].map((member, i) => (
-              <FadeInUp key={member.name} delay={i * 100}>
-                <div className="team-card group h-full">
-                  <ShineBorder
-                    borderRadius={20}
-                    borderWidth={1}
-                    duration={8 + i * 2}
-                    color={["#D4A574", "#C85A17", "#D4A574"]}
-                  >
-                    <div
-                      className="rounded-xl overflow-hidden h-full flex flex-col"
-                      style={{
-                        backgroundColor: "var(--color-surface)",
-                      }}
-                    >
-                      {/* Photo */}
-                      <div className="relative overflow-hidden h-56 md:h-64">
-                        <img
-                          src={member.image}
-                          alt={member.name}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                        {/* Role badge overlay */}
-                        <div className="absolute bottom-4 left-4">
-                          <span
-                            className="role-badge text-xs font-semibold px-3 py-1 rounded-full text-white/90 backdrop-blur-sm"
-                          >
-                            {member.role}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-6 flex flex-col flex-1">
-                        <div className="flex items-center gap-3 mb-3">
-                          <span className="text-lg">{member.icon}</span>
-                          <h3
-                            className="text-lg font-bold leading-snug"
-                            style={{ fontFamily: "var(--font-heading)" }}
-                          >
-                            {member.name}
-                          </h3>
-                        </div>
-                        <div
-                          className="w-8 h-0.5 mb-4 rounded-full"
-                          style={{
-                            background:
-                              "linear-gradient(90deg, #D4A574, #C85A17)",
-                          }}
-                        />
-                        <p
-                          className="text-sm leading-relaxed flex-1"
-                          style={{ color: "var(--color-muted)", lineHeight: 1.75 }}
-                        >
-                          {member.bio}
-                        </p>
-                      </div>
-                    </div>
-                  </ShineBorder>
-                </div>
-              </FadeInUp>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── CLOSING ATMOSPHERIC BAND ─── */}
-      <section className="relative h-[50vh] flex items-center justify-center overflow-hidden">
-        <img
-          src="https://source.unsplash.com/1600x800/?specialty+coffee+shop+counter+Scottsdale+aesthetic"
-          alt="Sunrise Coffee Co interior"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/70" />
-        <div className="relative z-10 text-center text-white max-w-3xl mx-auto px-6">
           <FadeInUp delay={0}>
-            <p
-              className="text-2xl md:text-4xl font-bold mb-6 leading-snug"
-              style={{ fontFamily: "var(--font-heading)" }}
-            >
-              Come experience the conversation
-              <br />
-              <span className="gradient-heading">for yourself.</span>
-            </p>
+            <div className="mb-14 md:mb-16 text-center">
+              <span
+                className="block text-xs font-semibold uppercase tracking-[0.22em] mb-4"
+                style={{
+                  color: "var(--color-accent, #c9a96e)",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                By the Numbers
+              </span>
+              <h2
+                className="text-2xl md:text-4xl font-bold"
+                style={{
+                  fontFamily: "var(--font-heading)",
+                  color: "var(--color-text)",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Small by design. Meaningful by practice.
+              </h2>
+            </div>
           </FadeInUp>
+
           <FadeInUp delay={100}>
-            <a
-              href="/visit"
-              className="inline-block px-8 py-3 rounded-full text-sm font-semibold uppercase tracking-widest transition-all duration-300 hover:scale-105"
+            <div
+              className="rounded-2xl overflow-hidden"
               style={{
-                background: "linear-gradient(90deg, #D4A574, #C85A17)",
-                color: "#fff",
-                boxShadow: "0 4px 24px rgba(200,90,23,0.35)",
+                background: "var(--color-surface, #f8f4ef)",
               }}
             >
-              Visit Us in Scottsdale
-            </a>
+              <ShineBorder
+                borderRadius={16}
+                borderWidth={1}
+                duration={10}
+                color={["#c9a96e", "#8b5e3c", "#e8d5b7"]}
+              >
+                <div className="grid grid-cols-2 md:grid-cols-4">
+                  {[
+                    { number: "15+", label: "Coffee Origins Sourced" },
+                    { number: "8", label: "Farmer Partnerships" },
+                    { number: "2", label: "Years Operating" },
+                    { number: "5000+", label: "Cups Served" },
+                  ].map((stat, i) => (
+                    <div
+                      key={stat.label}
+                      className="stat-item flex flex-col items-center justify-center text-center py-12 px-6 md:py-14 md:px-8"
+                    >
+                      <span
+                        className="block text-4xl md:text-5xl font-bold mb-2"
+                        style={{
+                          fontFamily: "var(--font-heading)",
+                          color: "var(--color-text)",
+                          letterSpacing: "-0.02em",
+                        }}
+                      >
+                        {stat.number}
+                      </span>
+                      <span
+                        className="block text-xs md:text-sm font-medium uppercase tracking-widest"
+                        style={{
+                          color: "var(--color-muted)",
+                          fontFamily: "var(--font-body)",
+                          lineHeight: "1.5",
+                        }}
+                      >
+                        {stat.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </ShineBorder>
+            </div>
+          </FadeInUp>
+
+          <FadeInUp delay={150}>
+            <p
+              className="text-center mt-8 text-sm"
+              style={{
+                color: "var(--color-muted)",
+                fontFamily: "var(--font-body)",
+                lineHeight: "1.7",
+              }}
+            >
+              Numbers that reflect deliberate growth — every origin, every partnership, every cup chosen with intention.
+            </p>
           </FadeInUp>
         </div>
       </section>
